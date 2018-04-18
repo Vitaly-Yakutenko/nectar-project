@@ -1,0 +1,28 @@
+# Scripts for Provisioning and Managing Nectar Virtual Machines
+
+## Pre-requisites
+
+To run any of the scripts in this folder, you will first need to set your Nectar keys (EC2 Key and Secret) as an
+environment variable. This is important as we cannot have this sensitive information over our public git repository
+
+To get your access key and secret, follow the steps below:
++ login to nector cloud at: https://dashboard.rc.nectar.org.au/project/
++ Navigate to "Access & Security" from the left-sidebar
++ At the top, navigate to "API Access"
++ Then select the "View Credentials" from the top-left buttons
++ Copy the EC2 Access Key and Secret safely somewhere (NEVER share this over public internet as anyone can
+        access our machines using these credentials
+
+Once you have the key and secret, you need to set it as your environment variables:
+
+### Ubuntu and Unix
+If you are using Ubuntu, just run the following commands on your terminal
+```bash
+export ENV_KEY='your_ec2_key'
+export ENV_SECRET='your_ec2_secret'
+```
+
+These two commands will set your environment variables but will only be valid for that terminal session.
+You can add these two commands in your `~/.bashrc` file if you want them to be loaded everytime the terminal
+opens up
+

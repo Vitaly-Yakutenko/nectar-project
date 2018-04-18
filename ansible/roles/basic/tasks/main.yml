@@ -1,0 +1,42 @@
+- name: "Installing Text Editors"
+  apt: pkg={{ item }} state=present
+  with_items:
+   - vim
+   - nano
+
+- name: "Installing Node"
+  apt: pkg={{ item }} state=present
+  with_items:
+   - npm
+   - nodejs-legacy
+
+- name: "Installing Docker Dependencies"
+  apt: pkg={{ item }} state=present
+  with_items:
+   - apt-transport-https
+   - ca-certificates
+   - curl
+   - software-properties-common
+
+- name: "Adding Docker apt-key"
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable
+    state: present
+
+- name: "Installing Docker"
+  become: yes
+  apt: 
+    name: docker-ce
+    state: present
+    update_cache: yes
+
+- name: "Adding ubuntu user in Docker group"
+  user:
+    name: ubuntu
+    shell: /bin/bash
+    groups: docker
+    append: yes

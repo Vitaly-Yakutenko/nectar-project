@@ -1,0 +1,10 @@
+---
+- hosts: all
+  become: true
+  roles:
+  - basic
+
+- hosts: jupiter
+  become: true
+  roles:
+  - jupiterhub

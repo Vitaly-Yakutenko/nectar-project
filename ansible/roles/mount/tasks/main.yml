@@ -1,0 +1,27 @@
+- name: "Making data directory"
+  file: path=/data state=directory
+  become: yes
+
+- name: "Creating file system"
+  become: yes
+  filesystem:
+    fstype: ext4
+    dev: /dev/vdc
+    force: no
+
+- name: "Mounting file system"
+  become: yes
+  mount:
+    path: /data
+    src: /dev/vdc
+    state: present
+    fstype: ext4
+
+- name: "Changing ownership to standard user"
+  become: yes
+  file:
+    path: /data
+    owner: ubuntu
+    group: ubuntu
+    recurse: yes
+    state: directory

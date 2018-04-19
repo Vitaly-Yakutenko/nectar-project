@@ -6,7 +6,7 @@
 
 - name: "Installing pip (2/2)"
   shell: python /tmp/get-pip.py
-  become: true
+  become: yes
 
 - name: "Installing Docker-py"
   pip:

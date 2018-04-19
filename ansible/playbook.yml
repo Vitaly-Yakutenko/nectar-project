@@ -8,3 +8,8 @@
   become: true
   roles:
   - jupiterhub
+
+- hosts: test
+  become: true
+  roles:
+  - mount

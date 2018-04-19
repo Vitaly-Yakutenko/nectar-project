@@ -17,7 +17,8 @@ if __name__ == '__main__':
         reservation = ec2_conn.run_instances('ami-00003837',
                                              key_name='Cloud',
                                              instance_type='m1.small',
-                                             security_groups=['default'])
+                                             security_groups=['default'],
+                                             placement='melbourne-qh2')
 
 
 
@@ -33,10 +34,13 @@ if __name__ == '__main__':
 
         if vol_size:
             vol_req = ec2_conn.create_volume(vol_size, 'melbourne-qh2')
-            while not ec2_conn.get_all_volumes([vol_req.id])[0].status=='available':
-                print ec2_conn.get_all_volumes([vol_req.id])[0].status
+            ec2_conn.create_tags([vol_req.id], {"Name": name + "-volume"})
+            curr_vol = ec2_conn.get_all_volumes([vol_req.id])[0]
+            while not curr_vol.status=='available':
                 time.sleep(5)
+                curr_vol = ec2_conn.get_all_volumes([vol_req.id])[0]
             print "Volume created.."
+
             ec2_conn.attach_volume(vol_req.id, instance.id, '/dev/vdc')
             print "Volume attached at /dev/vdc"
 

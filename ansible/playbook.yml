@@ -4,12 +4,10 @@
   roles:
   - basic
 
-- hosts: jupiter
+- hosts: jupyter
   become: true
+  vars:
+    v_hostname : inventory_hostname
   roles:
   - jupiterhub
 
-- hosts: test
-  become: true
-  roles:
-  - mount

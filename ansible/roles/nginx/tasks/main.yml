@@ -1,0 +1,26 @@
+- name: "Installing Nginx"
+  apt:
+    pkg: nginx
+    state: present
+
+- name: "Installing jinja (1/2)"
+  pip:
+    name: jinja2
+
+- name: "Installing jinja (2/2)"
+  pip:
+    name: jinja2-cli
+
+- name: "Generating SSL certificates"
+
+- name: "Copying nginx.conf.j2"
+  become: true
+  copy:
+    src: ../files/nginx.conf.j2
+    dest: /etc/nginx/nginx.conf.j2
+    owner: ubuntu
+    group: ubuntu
+    mode: 0644
+
+- name: "Configuring Nginx"
+  shell: "jinja2 /etc/nginx/nginx.conf.j2

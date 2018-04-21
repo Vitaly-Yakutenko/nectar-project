@@ -1,0 +1,18 @@
+{
+  "Comment": "Testing AWSCLI",
+  "Changes": [
+    {
+      "Action": "DELETE",
+      "ResourceRecordSet": {
+        "Name": "jupiter.cloudprojectnectar.co",
+        "Type": "A",
+        "TTL": 60,
+        "ResourceRecords": [
+          {
+            "Value": "43.240.98.37"
+          }
+        ]
+      }
+    }
+  ]
+}

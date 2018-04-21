@@ -1,5 +1,7 @@
 - name: "Making data directory"
-  file: path=/data state=directory
+  file:
+    path=/data
+    state=directory
   become: yes
 
 - name: "Creating file system"

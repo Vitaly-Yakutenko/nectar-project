@@ -17,6 +17,7 @@
    - ca-certificates
    - curl
    - software-properties-common
+   - python-pip
 
 - name: "Adding Docker apt-key"
   apt_key:
@@ -41,12 +42,12 @@
     groups: docker
     append: yes
 
-- name: "Installing pip (1/2)"
-  get_url:
-    url: https://bootstrap.pypa.io/get-pip.py
-    dest: /tmp/get-pip.py
-    mode: 0770
-
-- name: "Installing pip (2/2)"
-  shell: python /tmp/get-pip.py
-  become: yes
+#- name: "Installing pip (1/2)"
+#  get_url:
+#    url: https://bootstrap.pypa.io/get-pip.py
+#    dest: /tmp/get-pip.py
+#    mode: 0770
+#
+#- name: "Installing pip (2/2)"
+#  shell: python /tmp/get-pip.py
+#  become: yes

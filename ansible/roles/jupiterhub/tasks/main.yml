@@ -1,7 +1,22 @@
-- name: "Installing Docker-py"
-  pip:
-    name: docker-py
+#- name: "Installing Docker-py"
+#  pip:
+#    name: docker-py
 
+- name: "Installing Docker Compose"
+  pip:
+    name: docker-compose
+
+- name: "Installing jinja (1/2)"
+  become: yes
+  become_flags: '-H'
+  pip:
+    name: jinja2
+
+- name: "Installing jinja (2/2)"
+  become: yes
+  become_flags: '-H'
+  pip:
+    name: jinja2-cli
 
 - name: "Create a login user"
   user:
@@ -14,13 +29,86 @@
    shell: /bin/bash       # Defaults to /bin/bash
    createhome: yes
 
-- name: "Running Juiperhub Docker Image"
-  docker_container:
-    name: jupyterhub
-    image: jupyterhub/jupyterhub
-    detach: true
-    command: jupyterhub
-    ports:
-     - "8000:8000"
-    state: started
+- name: "Cloning jupyterhub Docker Repository"
+  git:
+    repo: https://github.com/jupyterhub/jupyterhub-deploy-docker.git
+    dest: "{{ ansible_user_dir }}/jupyter/"
+    force: yes
+
+- file:
+    path: "{{ansible_user_dir}}/jupyter/secrets"
+    state: directory
+    mode: 0755
+
+- name: "Copying oauth.env.j2"
+  become: yes
+  copy:
+    src: ../files/oauth.env.j2
+    dest: "{{ansible_user_dir}}/jupyter/secrets/oauth.env.j2"
+    owner: ubuntu
+    group: ubuntu
+    mode: 0644
+
+- name: "Configuring OAuth.env"
+  become: yes
+  shell: "jinja2 {{ansible_user_dir}}/jupyter/secrets/oauth.env.j2 -D domain={{ v_hostname }} -D client_id={{ v_client_id }} -D client_secret={{ v_client_secret }} > {{ansible_user_dir}}/jupyter/secrets/oauth.env"
+
+- name: "Copying userfile"
+  become: true
+  copy:
+    src: ../files/userlist
+    dest: "{{ansible_user_dir}}/jupyter/userlist"
+    owner: ubuntu
+    group: ubuntu
+    mode: 0644
+
+- name: "Copying certificate"
+  become: true
+  copy:
+    src: "/etc/letsencrypt/live/{{v_hostname}}/fullchain.pem"
+    dest: "{{ansible_user_dir}}/jupyter/secrets/jupyterhub.crt"
+    owner: ubuntu
+    group: ubuntu
+    remote_src: yes
+    mode: 0644
+
+- name: "Copying privatekey"
+  become: true
+  copy:
+    src: "/etc/letsencrypt/live/{{v_hostname}}/privkey.pem"
+    dest: "{{ansible_user_dir}}/jupyter/secrets/jupyterhub.key"
+    owner: ubuntu
+    group: ubuntu
+    remote_src: yes
+    mode: 0644
+
+- name: "Making build for JupyterHub"
+  shell: "make build"
+  args:
+    chdir: "{{ ansible_user_dir }}/jupyter/"
+
+- name: "Making build for JupyterHub"
+  shell: "make notebook_image"
+  args:
+    chdir: "{{ ansible_user_dir }}/jupyter/"
+
+- name: "Running jupyterHub"
+  shell: "docker-compose up -d"
+  args:
+    chdir: "{{ ansible_user_dir }}/jupyter/"
+
+
+#- name: "Running Juiperhub Docker Image"
+#  docker_container:
+#    name: jupyterhub
+#    image: jupyterhub/jupyterhub
+#    detach: true
+#    command: jupyterhub
+#    privileged: yes
+#    ports:
+#     - "8000:8000"
+#    state: started
+#
+#- name: "Creating user inside docker instance"
+#  shell: "docker exec jupyterhub bash -l -c 'useradd -d /home/ubuntu -ms /bin/bash -g root -G sudo -p $6$sbBHh5bpBN$f0avA6XgUgO0hv2Pqydun/Xy9xM8V61HHZ8X/k74vc/6dl.UqBJ5xhFxuu0UZmX/Ftw2P5nbVsdyfe6OccWDw1 dawer'"
 

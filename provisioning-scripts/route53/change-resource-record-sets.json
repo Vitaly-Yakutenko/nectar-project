@@ -2,14 +2,14 @@
   "Comment": "Testing AWSCLI",
   "Changes": [
     {
-      "Action": "DELETE",
+      "Action": "CREATE",
       "ResourceRecordSet": {
-        "Name": "jupyter.cloudprojectnectar.co",
+        "Name": "couchdb.cloudprojectnectar.co",
         "Type": "A",
         "TTL": 60,
         "ResourceRecords": [
           {
-            "Value": "43.240.98.37"
+            "Value": "115.146.95.29"
           }
         ]
       }

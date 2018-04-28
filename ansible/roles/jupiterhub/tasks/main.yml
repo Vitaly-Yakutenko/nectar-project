@@ -21,13 +21,33 @@
 - name: "Create a login user"
   user:
    name: admin 
-   password: '$6$hcJxAWraHfJ$6jtfSPUVchxESYyQRYt8czQeT4XeR0nNd.tDr2nxsqcJE0DxQXArnkTKteDUNFPeI6GGsbOgPgbGcg66LjkkV'
+   password: '1l1e3B7dV.hfw'
    groups: # Empty by default, here we give it some groups
     - docker
     - sudo
    state: present
+   home: /data/notebooks/admin
    shell: /bin/bash       # Defaults to /bin/bash
    createhome: yes
+
+- name: Make sure we have a 'wheel' group
+  group:
+    name: wheel
+    state: present
+
+- name: Allow 'wheel' group to have passwordless sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%wheel'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    validate: visudo -cf %s
+
+- name: Add sudoers users to wheel group
+  user:
+    name: "admin"
+    groups: wheel
+    append: yes
 
 - name: "Cloning jupyterhub Docker Repository"
   git:
@@ -35,7 +55,23 @@
     dest: "{{ ansible_user_dir }}/jupyter/"
     force: yes
 
-- file:
+- name: "Overwriting jupyterhub Configuration file"
+  become: yes
+  copy:
+    src: ../files/jupyterhub_config.py
+    dest: "{{ansible_user_dir}}/jupyter/jupyterhub_config.py"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: "Creating notebooks directory in host machine"
+  file:
+    path: "/data/notebooks"
+    state: directory
+    mode: 0755
+
+- name: "Creating Secrets Directory"
+  file:
     path: "{{ansible_user_dir}}/jupyter/secrets"
     state: directory
     mode: 0755

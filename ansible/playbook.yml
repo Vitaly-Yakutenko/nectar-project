@@ -6,12 +6,25 @@
   - mount
 
 - hosts: jupyter
-  become: true
+  become: yes
   vars:
     v_hostname : "{{ inventory_hostname }}"
     v_email: sdawer@student.unimelb.edu.au
-    v_client_id: c5df9b0b658179e01f09
-    v_client_secret: 55c683cd442f9a574b6c92294c3934a1eaeee8b7
+    v_client_id: dc7ada54eecdbf6af6fd
+    v_client_secret: abf2ce8f6276682401c0a7b1f05446430932909b
   roles:
+  - ssl
   - jupiterhub
+
+- hosts: couchdb
+  become: yes
+  vars:
+   v_hostname: "{{ inventory_hostname }}"
+   v_email: sdawer@student.unimelb.edu.au
+   v_nginx:
+     proxy: '5984'
+     https: True
+  roles:
+  - ssl
+  - nginx
 

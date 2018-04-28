@@ -4,7 +4,7 @@
     {
       "Action": "DELETE",
       "ResourceRecordSet": {
-        "Name": "jupiter.cloudprojectnectar.co",
+        "Name": "jupyter.cloudprojectnectar.co",
         "Type": "A",
         "TTL": 60,
         "ResourceRecords": [

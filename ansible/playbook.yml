@@ -3,11 +3,15 @@
   become: true
   roles:
   - basic
+  - mount
 
 - hosts: jupyter
   become: true
   vars:
-    v_hostname : inventory_hostname
+    v_hostname : "{{ inventory_hostname }}"
+    v_email: sdawer@student.unimelb.edu.au
+    v_client_id: c5df9b0b658179e01f09
+    v_client_secret: 55c683cd442f9a574b6c92294c3934a1eaeee8b7
   roles:
   - jupiterhub
 

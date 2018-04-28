@@ -4,14 +4,31 @@
     state: present
 
 - name: "Installing jinja (1/2)"
+  become: yes
+  become_flags: '-H'
   pip:
     name: jinja2
 
 - name: "Installing jinja (2/2)"
+  become: yes
+  become_flags: '-H'
   pip:
     name: jinja2-cli
 
-- name: "Generating SSL certificates"
+- name: "Cloning letsencrypt repository"
+  git:
+    repo: https://github.com/letsencrypt/letsencrypt
+    dest: "{{ ansible_user_dir }}/letsencrypt/"
+    force: yes
+
+- name: "Stopping Nginx service for SSL certificates creation"
+  service:
+    name: nginx
+    state: stopped
+
+- name: "Creating SSL certificates for {{ v_hostname }}"
+  shell: "{{ ansible_user_dir }}/letsencrypt/letsencrypt-auto certonly --standalone -d {{ v_hostname }} -m {{ v_email }} -n --agree-tos"
+  become: true
 
 - name: "Copying nginx.conf.j2"
   become: true
@@ -23,4 +40,11 @@
     mode: 0644
 
 - name: "Configuring Nginx"
-  shell: "jinja2 /etc/nginx/nginx.conf.j2
+  become: yes
+  shell: "jinja2 /etc/nginx/nginx.conf.j2 -D domain={{ v_hostname }} > /etc/nginx/nginx.conf"
+
+- name: "Restarting Nginx service"
+  become: true
+  service:
+    name: nginx
+    state: restarted

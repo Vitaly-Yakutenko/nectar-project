@@ -1,0 +1,7 @@
+twitter
+tweepy
+pandas
+matplotlib
+seaborn
+plotly
+pyyaml

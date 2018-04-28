@@ -1,0 +1,10 @@
+TWEETER:    
+    access_token: "1397965644-WVAG6QSXEBCdHtyAeEgBsKYXEKlkoBBtb58oOAN"
+    access_token_secret: "V6V2aUVFmUwkUcHhFzOn4XnwdkbCJPLOL65ZSEnRe9d7O"
+    consumer_key: "sZMPWW0zCEVsHnDyO950hWEWN"
+    consumer_secret: "KfS6UNO3cTCC6j5xHfjQGaNzBFofDRN98pm5aguCvduIr0UQpg"
+
+QUEUES:
+    new_tweets: '../data/tweets'
+    sentiment_tasks: '../data/sentiment_tasks'
+    geo_tasks: '../data/geo_analyser_tasks'

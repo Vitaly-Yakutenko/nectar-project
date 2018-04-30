@@ -5,6 +5,6 @@ TWEETER:
     consumer_secret: "KfS6UNO3cTCC6j5xHfjQGaNzBFofDRN98pm5aguCvduIr0UQpg"
 
 QUEUES:
-    new_tweets: '../data/tweets'
-    sentiment_tasks: '../data/sentiment_tasks'
-    geo_tasks: '../data/geo_analyser_tasks'
+    new_tweets: '../shared_folder/tweets'
+    sentiment_tasks: '../shared_folder/sentiment_tasks'
+    geo_tasks: '../shared_folder/geo_analyser_tasks'

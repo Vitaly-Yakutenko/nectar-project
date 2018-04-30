@@ -6,5 +6,6 @@ TWEETER:
 
 QUEUES:
     new_tweets: '../shared_folder/tweets'
+    processed_tweets: '../shared_folder/processed_tweets'
     sentiment_tasks: '../shared_folder/sentiment_tasks'
     geo_tasks: '../shared_folder/geo_analyser_tasks'

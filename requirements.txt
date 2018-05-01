@@ -7,3 +7,5 @@ plotly
 pyyaml
 shapely
 cloudant
+nltk
+twython

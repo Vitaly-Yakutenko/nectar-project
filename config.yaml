@@ -15,3 +15,4 @@ COUCHDB:
     host: 'http://115.146.95.29:5984'
     user: 'admin'
     password: 'group27'
+    tweets_db: 'tweets'

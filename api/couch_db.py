@@ -23,8 +23,12 @@ class TweetsDB():
         self._db.create_document(document) 
         
     def update_document(self, document_id, attributes_dict):
+        if attributes_dict is None:
+            return False
+        
         document = self._db[document_id]
         for key in attributes_dict.keys():
             document[key] = attributes_dict[key]
         document.save()
+        return True
         

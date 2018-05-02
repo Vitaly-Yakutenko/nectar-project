@@ -20,6 +20,8 @@ QUEUES:
     processed_tweets: '../shared_folder/processed_tweets'
     sentiment_tasks: '../shared_folder/sentiment_tasks'
     geo_tasks: '../shared_folder/geo_analyser_tasks'
+    topic_tasks: '../shared_folder/topic_analyser_tasks'
+    user_tweets_tasks: '../shared_folder/user_tweets_tasks'
     
 
 COUCHDB:

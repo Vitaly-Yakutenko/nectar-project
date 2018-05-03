@@ -5,30 +5,31 @@ from list_machines import list_machines
 import time
 import sys
 
-usages = "Usage: python create_machine.py <machine_name> <domain> <volume_size>\nIf no volume_size is given, " \
+usages = "Usage: python create_machine.py <machine_name> <domain> <flavor> <volume_size>\nIf no volume_size is given, " \
          "by default no volume will be attached"
 if __name__ == '__main__':
-    if len(sys.argv) < 3:
+    if len(sys.argv) < 4:
         print usages
         exit(0)
     else:
         name = sys.argv[1]
         domain = sys.argv[2]
-
+        flavor = sys.argv[3]
+        availability_zone = 'melbourne-np'
         # validating domain name
         if "cloudprojectnectar.co" not in domain:
             print "The given domain name should be complete."
             print usages
             exit(-1)
 
-        vol_size = sys.argv[3] if len(sys.argv) > 2 else None
+        vol_size = sys.argv[4] if len(sys.argv) > 3 else None
 
         # Spawning Instance
         reservation = ec2_conn.run_instances('ami-00003837',
                                              key_name='Cloud',
-                                             instance_type='m1.small',
+                                             instance_type=flavor,
                                              security_groups=['default'],
-                                             placement='melbourne-qh2')
+                                             placement=availability_zone)
 
 
         # Getting the actual created instance
@@ -51,7 +52,7 @@ if __name__ == '__main__':
 
         # Creating and attaching volume
         if vol_size:
-            vol_req = ec2_conn.create_volume(vol_size, 'melbourne-qh2')
+            vol_req = ec2_conn.create_volume(vol_size, availability_zone)
             ec2_conn.create_tags([vol_req.id], {"Name": name + "-volume"})
             curr_vol = ec2_conn.get_all_volumes([vol_req.id])[0]
             while not curr_vol.status=='available':
@@ -63,3 +64,10 @@ if __name__ == '__main__':
             print "Volume attached at /dev/vdc"
 
         list_machines([instance.id])
+
+        print "Restarting Instance"
+        ec2_conn.stop_instances([instance.id])
+        ec2_conn.start_instances([instance.id])
+        while not is_ready([instance.id]):
+            time.sleep(5)
+        print "Instance is Ready"

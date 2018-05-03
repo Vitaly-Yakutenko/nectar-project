@@ -11,14 +11,6 @@
     dev: /dev/vdc
     force: no
 
-- name: "Mounting file system"
-  become: yes
-  mount:
-    path: /data
-    src: /dev/vdc
-    state: present
-    fstype: ext4
-
 - name: "Changing ownership to standard user"
   become: yes
   file:
@@ -27,3 +19,13 @@
     group: ubuntu
     recurse: yes
     state: directory
+
+- name: "Mounting file system"
+  become: yes
+  mount:
+    path: /data
+    src: /dev/vdc
+    state: mounted
+    fstype: ext4
+
+

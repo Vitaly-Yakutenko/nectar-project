@@ -2,14 +2,14 @@
   "Comment": "Testing AWSCLI",
   "Changes": [
     {
-      "Action": "CREATE",
+      "Action": "DELETE",
       "ResourceRecordSet": {
-        "Name": "couchdb.cloudprojectnectar.co",
+        "Name": "couchdb1.cloudprojectnectar.co",
         "Type": "A",
         "TTL": 60,
         "ResourceRecords": [
           {
-            "Value": "115.146.95.29"
+            "Value": "115.146.86.84"
           }
         ]
       }

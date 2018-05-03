@@ -8,6 +8,25 @@ from shapely.geometry import Point, Polygon
 from api.couch_db import TweetsDB
 
 
+def australia_check(coordinates):
+    australia = [[109.94541423022338,-9.67869330662115],[155.03330484714022,-9.67869330662115],[155.03330484714022,-39.93552098705151],[109.94541423022338,-39.93552098705151]]
+    australia_box = Polygon(australia)
+    if isinstance(coordinates[0], list):              #check if polygon
+        coordinate_polygon = Polygon(coordinates[0])
+        pnt = Point(coordinate_polygon.centroid)
+
+    else:
+        pnt = Point(coordinates)
+    
+    if australia_box.contains(pnt):
+        return True
+    else:
+        return False
+        
+        
+
+
+
 def geo_check(coordinates):
     if isinstance(coordinates[0], list):              #check if polygon
         coordinate_polygon = Polygon(coordinates[0])
@@ -103,21 +122,33 @@ while True:
             with open(path, 'r') as fp:
                 geo = json.load(fp)
             geo_doc =geo_check(geo['coordinates'])
-            if geo_doc== None:
-                none_geo = none_geo_check(geo['coordinates'])
-                couch_db.update_document(tweet_id,none_geo)
-            else:             
-                couch_db.update_document(tweet_id,geo_doc)
-            try:
-                os.remove(path)
-                print('Task {} was processed'.format(path))
-            except Exception as e:
-                           # if failed, report it back to the user 
-                print("Error: {} .".format(e))
+            if australia_check(geo['coordinates']):         #geotag only if in Australia               
+                if geo_doc== None:
+                    none_geo = none_geo_check(geo['coordinates'])
+                    couch_db.update_document(tweet_id,none_geo)
+                    print('Task {} was processed.'.format(path))
+                else:
+                    couch_db.update_document(tweet_id,geo_doc)
+                    print('Task {} was processed.'.format(path))
+                try:
+                    os.remove(path)
+                except Exception as e:
+                              # if failed, report it back to the user 
+                    print("Error: {} .".format(e))
+            else: 
+                                             #if point not in Australia just add an attibute not in aus to the document
+                couch_db.update_document(tweet_id,{'geo_analyser_tage':'tweet not in Australia'})
+                print('Task {} was processed.'.format(path))
+                try:
+                    os.remove(path)
+                except Exception as e:
+                              # if failed, report it back to the user 
+                    print("Error: {} .".format(e))
+    
         except Exception as e:
             print('Tweet {} wasn\'t geotagged and updated on DB due to error. {}'.format(tweet_id, e))
          
     print('Iteration: {}\tFiles processed: {}'.format(i, len(geo_tweets)))
     i+=1
-    time.sleep(18)
+    time.sleep(5)
 

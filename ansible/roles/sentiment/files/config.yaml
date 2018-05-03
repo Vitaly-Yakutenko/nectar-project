@@ -1,0 +1,31 @@
+TWEETER:    
+    access_token: "1397965644-WVAG6QSXEBCdHtyAeEgBsKYXEKlkoBBtb58oOAN"
+    access_token_secret: "V6V2aUVFmUwkUcHhFzOn4XnwdkbCJPLOL65ZSEnRe9d7O"
+    consumer_key: "sZMPWW0zCEVsHnDyO950hWEWN"
+    consumer_secret: "KfS6UNO3cTCC6j5xHfjQGaNzBFofDRN98pm5aguCvduIr0UQpg"
+    
+    #Rough bounding boxes for Victoria+Tasmania, NSW, Queensland, SA+NT, WA
+    bounding_boxes: [
+                        [141,-44,155,-34],
+                        [141,-34,155,-28],
+                        [141,-28,155,-10],
+                        [128,-38,141,-10],
+                        [110,-38,128,-10]
+                    ]                   
+    number_of_instances: 1
+    rank: 0
+
+QUEUES:
+    new_tweets: '../shared_folder/tweets'
+    processed_tweets: '../shared_folder/processed_tweets'
+    sentiment_tasks: '../shared_folder/sentiment_tasks'
+    geo_tasks: '../shared_folder/geo_analyser_tasks'
+    topic_tasks: '../shared_folder/topic_analyser_tasks'
+    user_tweets_tasks: '../shared_folder/user_tweets_tasks'
+    
+
+COUCHDB:
+    host: 'http://115.146.95.29:5984'
+    user: 'admin'
+    password: 'group27'
+    tweets_db: 'tweets'

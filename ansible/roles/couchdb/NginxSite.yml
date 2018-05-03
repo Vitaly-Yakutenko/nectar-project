@@ -1,0 +1,52 @@
+name: Install nginx
+        ignore_errors: True
+        sudo: yes
+        shell: apt-get install nginx
+
+      - name: configure default file 
+        sudo: yes
+        shell: rm /etc/nginx/sites-available/default
+
+      - name: configure default file 
+        sudo: yes
+        shell: touch /etc/nginx/sites-available/default
+
+      - name: add content to the default
+        sudo: yes
+        shell: |
+          echo "server {" >> /etc/nginx/sites-available/default
+          echo "    listen 443;" >> /etc/nginx/sites-available/default
+          echo "    ssl on;" >> /etc/nginx/sites-available/default
+          echo "    server_name couch1.cloudprojectnectar.co;" >> /etc/nginx/sites-available/default
+
+          echo "    ssl_certificate /etc/letsencrypt/live/couch1.cloudprojectnectar.co/fullchain.pem;" >> /etc/nginx/sites-available/default
+          echo "    ssl_certificate_key /etc/letsencrypt/live/couch1.cloudprojectnectar.co/privkey.pem;" >> /etc/nginx/sites-available/default
+
+          echo "    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;" >> /etc/nginx/sites-available/default
+          echo "    ssl_prefer_server_ciphers on;" >> /etc/nginx/sites-available/default
+          echo "    ssl_ciphers 'ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-$" >> /etc/nginx/sites-available/default
+          echo "    ssl_session_timeout 1d;" >> /etc/nginx/sites-available/default
+          echo "    ssl_session_cache shared:SSL:50m;" >> /etc/nginx/sites-available/default
+          echo "    ssl_stapling on;" >> /etc/nginx/sites-available/default
+          echo "    ssl_stapling_verify on;" >> /etc/nginx/sites-available/default
+          echo "    add_header Strict-Transport-Security max-age=15768000;" >> /etc/nginx/sites-available/default
+
+          echo "    # if proxy port is defined, set that to default" >> /etc/nginx/sites-available/default
+          
+          echo "    location / {" >> /etc/nginx/sites-available/default
+          echo "        proxy_pass http://{{ ansible_default_ipv4.address }}:5984;" >> /etc/nginx/sites-available/default
+          echo "        proxy_http_version 1.1;" >> /etc/nginx/sites-available/default
+          echo "        proxy_set_header Upgrade \$http_upgrade;" >> /etc/nginx/sites-available/default
+          echo "        proxy_set_header Connection 'upgrade';" >> /etc/nginx/sites-available/default
+          echo "        proxy_set_header Host \$host;" >> /etc/nginx/sites-available/default
+          echo "        proxy_cache_bypass \$http_upgrade;" >> /etc/nginx/sites-available/default
+          echo "    }" >> /etc/nginx/sites-available/default
+          echo "}" >> /etc/nginx/sites-available/default
+
+      - name: restart nginx
+        sudo: yes
+        shell: service nginx restart
+
+      - name: allow nginx to pass firewall
+        sudo: yes
+        shell: ufw allow 'Nginx HTTP'

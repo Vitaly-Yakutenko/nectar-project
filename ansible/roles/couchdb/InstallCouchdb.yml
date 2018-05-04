@@ -110,7 +110,7 @@
       - name: add users
         become: yes
         shell: >
-          adduser --system --no-create-home 
+          adduser --system --no-create-home -G group27
           --shell /bin/bash --group --gecos "CouchDB Administrator" couchdb
       
       - name: copy couchdb to home

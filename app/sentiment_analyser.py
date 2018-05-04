@@ -53,7 +53,7 @@ def senti_analyse(input_doc):
 
 i = 1
 while True:
-    senti_tweets = glob('{}/*.txt'.format(senti_tasks_path))
+    senti_tweets = glob('{}/*.txt'.format(senti_tasks_path))[:1000]
  
     for path in senti_tweets:
         try:

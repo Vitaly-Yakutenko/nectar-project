@@ -25,7 +25,7 @@ QUEUES:
     
 
 COUCHDB:
-    host: 'http://115.146.95.29:5984'
+    host: 'https://couch1.cloudprojectnectar.co'
     user: 'admin'
     password: 'group27'
     tweets_db: 'tweets'

@@ -21,14 +21,6 @@
     name: ubuntu
     group: group27
 
-- name: "Changing ownership to standard user"
-  become: yes
-  file:
-    path: /data
-    owner: ubuntu
-    group: ubuntu
-    recurse: yes
-    state: directory
 
 - name: "Mounting file system"
   become: yes
@@ -37,5 +29,16 @@
     src: /dev/vdc
     state: mounted
     fstype: ext4
+
+
+- name: "Changing ownership to standard user"
+  become: yes
+  file:
+    path: /data
+    owner: ubuntu
+    group: group27
+    recurse: yes
+    mode: 0775
+    state: directory
 
 

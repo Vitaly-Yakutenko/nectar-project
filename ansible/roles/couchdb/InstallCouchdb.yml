@@ -1,0 +1,177 @@
+- hosts: dbserver:server
+  vars:
+    http_port: 80
+    max_clients: 200
+  tasks:
+      - debug: var=ansible_all_ipv4_addresses
+      - debug: var=ansible_default_ipv4.address
+
+      - name: terminate other jobs
+        shell: set -e
+
+      # -------------------------------- Dependencies and tools ---------------------------------- #
+      - name: Install the package "curl"
+        become: yes
+        apt:
+          name: curl
+          state: present
+
+      - name: Install the package "python-pip"
+        ignore_errors: True
+        become: yes
+        apt:
+          name: python-pip
+          state: present
+
+      - name: Install the package "npm"
+        ignore_errors: True
+        become: yes
+        apt:
+          name: npm
+          state: present
+
+      - name: Install the package "python-setuptools"
+        ignore_errors: True
+        become: yes
+        apt:
+          name: python-setuptools
+          state: present
+
+      - name: Install couchdb for python
+        become: yes
+        shell: easy_install couchdb
+
+      - name: Install Tweepy for python
+        become: yes
+        shell: easy_install Tweepy
+
+      - name: Install pm2
+        become: yes
+        shell: npm install pm2 -g
+
+      # --------------------------------- Install couchdb --------------------------------- #
+
+      - name: update packages
+        become: yes
+        shell: apt-get update || true
+
+      - name: install dependencies
+        become: yes
+        shell: >
+          apt-get --no-install-recommends -y install build-essential pkg-config
+          runit erlang libicu-dev libmozjs185-dev libcurl4-openssl-dev
+
+      - name: download the couchdb file 
+        # shell: wget http://apache.melbourneitmirror.net/couchdb/source/2.1.1/apache-couchdb-2.1.1.tar.gz
+        get_url:
+          url: http://apache.melbourneitmirror.net/couchdb/source/2.1.1/apache-couchdb-2.1.1.tar.gz
+          dest: ./
+
+      - name: uncompress the tar
+        shell: tar -xvzf apache-couchdb-2.1.1.tar.gz
+
+      - name: cd to the directory and install
+        shell: cd apache-couchdb-2.1.1 && ./configure && make release
+
+      - name: let all nodes bind to a public address
+        shell: >
+          sed -i 's/;bind_address =.*/bind_address = 0.0.0.0/'
+          apache-couchdb-2.1.1/rel/couchdb/etc/local.ini
+
+      - name: all nodes default data dir
+        shell: >
+          sed -i '9 a\database_dir = /data'
+          apache-couchdb-2.1.1/rel/couchdb/etc/local.ini
+
+      - name: all nodes default index dir
+        shell: >
+          sed -i '10 a\view_index_dir = /data'
+          apache-couchdb-2.1.1/rel/couchdb/etc/local.ini
+
+      - name: let all nodes have the same username and password
+        shell: >
+          sed -i 's/;admin =.*/admin = group27/'
+          apache-couchdb-2.1.1/rel/couchdb/etc/local.ini
+
+      - name: settings in the system configure
+        shell: >
+          sed -i 
+          's/\[\]\./\[ \{lager, \[ \{error_logger_hwm, 1000\}, \{error_logger_redirect, true\}, 
+          \{handlers, \[ \{lager_console_backend, \[debug, \{lager_default_formatter,\[ date, \" \", 
+          time, \" \[\", severity, \"\] \",node, \" \", pid, \" \",message,\"\\n\"\]\}\]\}\]\},
+          \{inet_dist_listen_min, 9100\},\{inet_dist_listen_max, 9200\}\]\}\]./' 
+          apache-couchdb-2.1.1/rel/couchdb/releases/2.1.1/sys.config
+
+      - name: let all nodes have unique names
+        shell: >
+          sed -i 's/-name couchdb@localhost/-name couchdb@{{ ansible_default_ipv4.address }}/'
+          apache-couchdb-2.1.1/rel/couchdb/etc/vm.args
+
+      - name: add users
+        become: yes
+        shell: >
+          adduser --system --no-create-home 
+          --shell /bin/bash --group --gecos "CouchDB Administrator" couchdb
+      
+      - name: copy couchdb to home
+        become: yes
+        shell: cp -R apache-couchdb-2.1.1/rel/couchdb /home/couchdb
+
+      - name: permissons for the home_couchdb
+        become: yes
+        shell: |
+          chown -R couchdb:couchdb /home/couchdb 
+          find /home/couchdb -type d -exec chmod 0770 {} \;
+          sh -c 'chmod 0644 /home/couchdb/etc/*'
+          mkdir /var/log/couchdb
+          chown couchdb:couchdb /var/log/couchdb
+          mkdir /etc/sv/couchdb
+          mkdir /etc/sv/couchdb/log
+
+      - name: run 
+        shell:
+          cmd: |
+            cat > apache-couchdb-2.1.1/run << EOF
+            #!/bin/sh
+            export HOME=/home/couchdb
+            exec 2>&1
+            exec chpst -u couchdb /home/couchdb/bin/couchdb
+            EOF
+
+      - name: log_run
+        shell:
+          cmd: |
+            cat > apache-couchdb-2.1.1/log_run << EOF
+            #!/bin/sh
+            exec svlogd -tt /var/log/couchdb
+            EOF
+
+      - name: rest
+        become: yes
+        shell: |
+          mv apache-couchdb-2.1.1/run /etc/sv/couchdb/run
+          mv apache-couchdb-2.1.1/log_run /etc/sv/couchdb/log/run
+
+          chmod u+x /etc/sv/couchdb/run
+          chmod u+x /etc/sv/couchdb/log/run
+
+          ln -s /etc/sv/couchdb/ /etc/service/couchdb
+
+          sleep 5
+          sudo sv status couchdb
+
+      # -------------------------------- Get Code ---------------------------------- #
+        
+      - name: Install the package "git"
+        become: yes
+        apt:
+          name: git
+          state: present
+
+      # ------------------------------- Enable login using password ----------------------------------- #
+
+      - name: Edit security settings
+        shell: sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
+
+      # ---------------------------- Form a cluster -------------------------------------- #
+      #- include: SetupCluster.yml

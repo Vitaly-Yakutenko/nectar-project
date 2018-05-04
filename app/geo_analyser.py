@@ -45,6 +45,7 @@ def geo_check(coordinates):
                 return {'SA4_name':features[i]['properties']['feature_name'],
                         'SA4_code':idx,
                         'GCCSA_name':mappings_df.loc[idx]['GCCSA_NAME_2016'],
+                        'GCCSA_code':mappings_df.loc[idx]['GCCSA_CODE_2016'],
                         'State_name':mappings_df.loc[idx]['STATE_NAME_2016']}
                 break
             
@@ -52,6 +53,7 @@ def geo_check(coordinates):
                 return {'SA4_name':features[i]['properties']['feature_name'],
                         'SA4_code':idx,
                         'GCCSA_name':mappings_df.loc[idx]['GCCSA_NAME_2016'],
+                        'GCCSA_code':mappings_df.loc[idx]['GCCSA_CODE_2016'],
                         'State_name':mappings_df.loc[idx]['STATE_NAME_2016']}
                 break
             
@@ -77,9 +79,10 @@ def none_geo_check(coordinates):
 
     min_index = dist_point_id[dist_from_point.index(min(dist_from_point))]   
     idx = int(features[min_index]['properties']['sa4_code16'])
-    return {'SA4_name':features[min_index]['properties']['feature_name'],
+    return {'SA4_name':features[i]['properties']['feature_name'],
                         'SA4_code':idx,
                         'GCCSA_name':mappings_df.loc[idx]['GCCSA_NAME_2016'],
+                        'GCCSA_code':mappings_df.loc[idx]['GCCSA_CODE_2016'],
                         'State_name':mappings_df.loc[idx]['STATE_NAME_2016']}
 
 print('Starting application...')

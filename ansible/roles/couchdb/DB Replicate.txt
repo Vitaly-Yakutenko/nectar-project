@@ -1,0 +1,12 @@
+curl -X POST 'http://couchdb.cloudprojectnectar.co:5984/_replicate' -H 'Content-type: application/json' -d '{"source": "http://couchdb.cloudprojectnectar.co:5984/tweets", "target": "https://couch1.cloudprojectnectar.co/tweets"}'
+
+#Alternate Method:
+
+# cd to database dir, where all .couchdb files reside
+cd /var/lib/couchdb
+
+# create new databases in the target instance
+for i in ./*.couch; do curl -X PUT https://couch1.cloudprojectnectar.co$( echo $i | grep -oP '[^.]+(?=.couch)'); done
+
+# one-time replication of each database from source to target instance
+for i in ./*.couch; do curl -X POST http://couchdb.cloudprojectnectar.co:5984/_replicate -H "Content-type: application/json" -d '{"source": "'"$( echo $i | grep -oP /]+(?=.couch)')"'", "target": "https://couch1.cloudprojectnectar.co'$( echo $i | grep -oP '[^.]+(?=.couch)')'"}'; done

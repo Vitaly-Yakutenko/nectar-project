@@ -41,7 +41,7 @@
 
 - name: "Configuring Nginx"
   become: yes
-  shell: "jinja2 /etc/nginx/nginx.conf.j2 -D domain={{ v_hostname }} -D proxy_port={{ v_nginx.proxy if v_nginx else 'undefined' }} -D https={{ v_nginx.https if v_nginx else False }} > /etc/nginx/nginx.conf"
+  shell: "jinja2 /etc/nginx/nginx.conf.j2 -D domain={{ v_hostname }} -D proxy_port={{ v_nginx.proxy if v_nginx else 'undefined' }} -D https={{  v_nginx.https if v_nginx.https is defined else False }} > /etc/nginx/nginx.conf"
 
 - name: "Restarting Nginx service"
   become: true

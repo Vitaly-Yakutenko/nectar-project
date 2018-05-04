@@ -11,6 +11,16 @@
     dev: /dev/vdc
     force: no
 
+- name: "Creating group"
+  group:
+    name: group27
+    state: present
+
+- name: "Adding user to our group"
+  user:
+    name: ubuntu
+    group: group27
+
 - name: "Changing ownership to standard user"
   become: yes
   file:

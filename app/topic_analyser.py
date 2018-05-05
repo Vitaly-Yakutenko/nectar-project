@@ -20,12 +20,11 @@ couch_db = TweetsDB(couch_db_conf)
 topic_tasks_path= cfg['QUEUES']['topic_tasks']
 
 
-hashtags = ['bitcoin', 'blockchain', 'btc', 'cryptocurrency', 'market\svalue',
-            'crypto','ethereum', 'fintech', 'coin', 'doge', 'ethereum', 'ripple', 'litecoin', 
-            'cardano', 'monero', 'TRON', 'zcash', 'jaxx', 'copay', 'bitpay', 'exodus', 
-            'mycelium', 'Bread\sWallet', 'trezor', 'ledger\snano', 'Silk\sRoad', 'darknet\smarket', 
-            'dogecoin', 'ASIC\sMiner', 'Central\sLedger', 'Hashrate', 'ICO','ico'         
-           ]
+hashtags = ['bitcoin', 'blockchain', 'btc', 'cryptocurrency',
+            'crypto','ethereum', 'fintech', 'doge', 'ethereum', 'litecoin', 
+            'monero', 'TRON', 'zcash', 'jaxx', 'copay', 'bitpay', 
+            'mycelium', 'trezor', 'darknet\smarket', 
+            'dogecoin','Central\sLedger','ICO']
 
 
 '|'.join(hashtags)

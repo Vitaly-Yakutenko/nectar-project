@@ -1,0 +1,36 @@
+- hosts: dbserver
+  vars:
+    http_port: 80
+    max_clients: 200
+  tasks:
+      - debug: var=ansible_all_ipv4_addresses
+      - debug: var=ansible_default_ipv4.address
+      
+      - name: enable clustering
+        shell: >
+          curl -X POST -H "Content-Type: application/json" http://admin:group27@127.0.0.1:5984/_cluster_setup -d '{"action": "enable_cluster", "bind_address":"0.0.0.0", "username": "admin", "password":"group27", "port": 5984, "remote_node": "{{ item.split('@')[1] }}", "remote_current_user": "admin", "remote_current_password": "group27" }'
+        with_items:
+          - "{{ groups['dbserver'] }}"
+
+      - name: add nodes
+        uri:
+          url: "http://127.0.0.1:5986/_nodes/couchdb@{{ item.split('@')[1] }}"
+          method: PUT
+          user: admin
+          password: group27
+          body: "{}"
+          body_format: json
+          status_code: 201
+          force_basic_auth: yes
+          headers:
+            Content-Type: "application/json"
+
+        with_items: 
+          - "{{ groups['dbserver'] }}"
+
+      - name: finish clustering
+        shell: |
+          curl -X POST -H "Content-Type: application/json" http://admin:group27@127.0.0.1:5984/_cluster_setup -d '{"action": "finish_cluster"}'  > output.txt
+
+      # ---------------------------- Form a cluster -------------------------------------- #
+      #- include: NginxSite.yml

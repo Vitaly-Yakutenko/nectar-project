@@ -18,14 +18,19 @@ TWEETER:
 QUEUES:
     new_tweets: '../shared_folder/tweets'
     processed_tweets: '../shared_folder/processed_tweets'
-    sentiment_tasks: '../shared_folder/sentiment_tasks'
-    geo_tasks: '../shared_folder/geo_analyser_tasks'
+    sentiment_tasks: '../shared_folder/sentiment_tasks_prod'
+    geo_tasks: '../shared_folder/geo_analyser_tasks_prod'
     topic_tasks: '../shared_folder/topic_analyser_tasks'
     user_tweets_tasks: '../shared_folder/user_tweets_tasks'
+    
+AURIN_DATA:
+    sa2_australia: '../shared_folder/SA2_2016_AUST.csv'
+    sa4_data_for_geo: '../shared_folder/SA4_data_for_geotagging.json' 
     
 
 COUCHDB:
     host: 'https://couch1.cloudprojectnectar.co'
     user: 'admin'
     password: 'group27'
-    tweets_db: 'tweets'
+    tweets_db: 'tweets_prod'
+    aurin_db: 'aurin_datasets'

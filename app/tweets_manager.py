@@ -45,10 +45,10 @@ def main():
             try:
                 with open(path, 'r') as fp:
                     tweet_json = json.load(fp)
+                    couch_db.save_tweet(tweet_json)
                     tweet_id = tweet_json['id_str']
                     for analyser in analysers:
                         analyser.append_task(tweet_id, tweet_json)
-                    couch_db.save_tweet(tweet_json)
                     complete_task(tweet_json, path)
             except Exception as e:
                 print('Enexpected Error: {}'.format(e))

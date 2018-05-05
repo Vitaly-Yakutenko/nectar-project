@@ -45,6 +45,7 @@ def geo_check(coordinates):
                 return {'SA4_name':features[i]['properties']['feature_name'],
                         'SA4_code':idx,
                         'GCCSA_name':mappings_df.loc[idx]['GCCSA_NAME_2016'],
+                        'GCCSA_code':mappings_df.loc[idx]['GCCSA_CODE_2016'],
                         'State_name':mappings_df.loc[idx]['STATE_NAME_2016']}
                 break
             
@@ -52,6 +53,7 @@ def geo_check(coordinates):
                 return {'SA4_name':features[i]['properties']['feature_name'],
                         'SA4_code':idx,
                         'GCCSA_name':mappings_df.loc[idx]['GCCSA_NAME_2016'],
+                        'GCCSA_code':mappings_df.loc[idx]['GCCSA_CODE_2016'],
                         'State_name':mappings_df.loc[idx]['STATE_NAME_2016']}
                 break
             
@@ -77,9 +79,10 @@ def none_geo_check(coordinates):
 
     min_index = dist_point_id[dist_from_point.index(min(dist_from_point))]   
     idx = int(features[min_index]['properties']['sa4_code16'])
-    return {'SA4_name':features[min_index]['properties']['feature_name'],
+    return {'SA4_name':features[i]['properties']['feature_name'],
                         'SA4_code':idx,
                         'GCCSA_name':mappings_df.loc[idx]['GCCSA_NAME_2016'],
+                        'GCCSA_code':mappings_df.loc[idx]['GCCSA_CODE_2016'],
                         'State_name':mappings_df.loc[idx]['STATE_NAME_2016']}
 
 print('Starting application...')
@@ -96,14 +99,16 @@ couch_db_conf = cfg['COUCHDB']
 couch_db = TweetsDB(couch_db_conf)
 
 
-df = pd.read_csv('notebooks/SA2_2016_AUST.csv')
+sa2_australia = cfg['AURIN_DATA']['sa2_australia']
+df = pd.read_csv(sa2_australia)
 
-columns = ['SA4_CODE_2016', 'SA4_NAME_2016', 'GCCSA_NAME_2016', 'STATE_NAME_2016']
+columns = ['SA4_CODE_2016', 'SA4_NAME_2016', 'GCCSA_NAME_2016', 'STATE_NAME_2016','GCCSA_CODE_2016']
 
 mappings_df = df[columns].drop_duplicates().set_index('SA4_CODE_2016')
 mappings_df.head()
 
-with open('notebooks/SA4_data_for_geotagging.json', 'r') as fp:
+sa4_geo_tag = cfg['AURIN_DATA']['sa4_data_for_geo']
+with open(sa4_geo_tag, 'r') as fp:
     data = json.load(fp)
 
 features = data['features']
@@ -114,7 +119,7 @@ print('Initialisation finished.')
 print('Starting processing queue ...')
 i = 1
 while True:
-    geo_tweets = glob('{}/*.txt'.format(geo_tasks_path))
+    geo_tweets = glob('{}/*.txt'.format(geo_tasks_path))[:1000]
  
     for path in geo_tweets:
         try:
@@ -127,28 +132,36 @@ while True:
                     none_geo = none_geo_check(geo['coordinates'])
                     couch_db.update_document(tweet_id,none_geo)
                     print('Task {} was processed.'.format(path))
+                    try:
+                        os.remove(path)
+                    except OSError as e:
+                        ## if failed, report it back to the user ##
+                        print ("Error: {} - {},".format(e.filename,e.strerror))            
                 else:
                     couch_db.update_document(tweet_id,geo_doc)
                     print('Task {} was processed.'.format(path))
-                try:
-                    os.remove(path)
-                except Exception as e:
-                              # if failed, report it back to the user 
-                    print("Error: {} .".format(e))
+                    try:
+                        os.remove(path)
+                    except OSError as e:
+                        ## if failed, report it back to the user ##
+                        print ("Error: {} - {},".format(e.filename,e.strerror))         
             else: 
                                              #if point not in Australia just add an attibute not in aus to the document
-                couch_db.update_document(tweet_id,{'geo_analyser_tage':'tweet not in Australia'})
+                none_aus = {'geo_analyser_tag':'tweet not in Australia'}
+                couch_db.update_document(tweet_id,none_aus)
                 print('Task {} was processed.'.format(path))
                 try:
                     os.remove(path)
-                except Exception as e:
-                              # if failed, report it back to the user 
-                    print("Error: {} .".format(e))
+                except OSError as e:
+                        ## if failed, report it back to the user ##
+                    print ("Error: {} - {},".format(e.filename,e.strerror))         
     
         except Exception as e:
             print('Tweet {} wasn\'t geotagged and updated on DB due to error. {}'.format(tweet_id, e))
          
     print('Iteration: {}\tFiles processed: {}'.format(i, len(geo_tweets)))
     i+=1
-    time.sleep(5)
+    time.sleep(15)
+
+
 

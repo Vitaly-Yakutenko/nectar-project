@@ -4,7 +4,7 @@ nltk.download('vader_lexicon')
 nltk.download('punkt')
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
-
+print("Loaded Vader_Lexicon and Punkt from NLTK")
 import json
 import os
 import time
@@ -13,7 +13,7 @@ from glob import glob
 from api.couch_db import TweetsDB
 os.chdir('../')
 
-
+print("Initializing Sentiment_Analyser....")
 #open the config file for Db connections and folder paths
 with open("config.yaml", 'r') as ymlfile:
     cfg = yaml.load(ymlfile)
@@ -27,7 +27,7 @@ couch_db = TweetsDB(couch_db_conf)
 senti_tasks_path= cfg['QUEUES']['sentiment_tasks']
 
 
-
+print("starting the processing queue.....  :)")
 def senti_analyse(input_doc):
     senti = SentimentIntensityAnalyzer()
     points = senti.polarity_scores(input_doc)
@@ -53,7 +53,7 @@ def senti_analyse(input_doc):
 
 i = 1
 while True:
-    senti_tweets = glob('{}/*.txt'.format(senti_tasks_path))
+    senti_tweets = glob('{}/*.txt'.format(senti_tasks_path))[:1000]
  
     for path in senti_tweets:
         try:
@@ -73,7 +73,7 @@ while True:
          
     print('Iteration: {}\tFiles processed: {}'.format(i, len(senti_tweets)))
     i+=1
-    time.sleep(18)
+    time.sleep(9)
 
 
 

@@ -2,7 +2,7 @@
   "ranks": [
     {
       "id": "0",
-      "shared_folder": "../shared_folder",
+      "shared_folder": "/data/",
       "couch_host": "couch1.cloudprojectnectar.co",
       "couch_port": "5984",
       "couch_db":"tweets",
@@ -17,7 +17,7 @@
     },
     {
       "id": "1",
-      "shared_folder": "../shared_folder",
+      "shared_folder": "/data",
       "couch_host": "couch1.cloudprojectnectar.co",
       "couch_port": "5984",
       "couch_db":"tweets",

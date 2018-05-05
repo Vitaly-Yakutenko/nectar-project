@@ -23,7 +23,6 @@
    v_email: sdawer@student.unimelb.edu.au
    v_nginx:
      proxy: '5984'
-     https: False
   roles:
   - ssl
   - nginx

@@ -11,8 +11,7 @@ class TweetsDB():
         databases = self._client.all_dbs()
         db_name = self._cfg['tweets_db']
         if not db_name in databases:
-            client.create_database(db_name)
-            #databases = client.all_dbs()
+            self._client.create_database(db_name)
         return self._client[db_name]
         
     def save_tweet(self, document):

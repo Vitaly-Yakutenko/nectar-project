@@ -119,7 +119,7 @@ print('Initialisation finished.')
 print('Starting processing queue ...')
 i = 1
 while True:
-    geo_tweets = glob('{}/*.txt'.format(geo_tasks_path))
+    geo_tweets = glob('{}/*.txt'.format(geo_tasks_path))[:1000]
  
     for path in geo_tweets:
         try:

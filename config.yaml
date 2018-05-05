@@ -22,10 +22,12 @@ QUEUES:
     geo_tasks: '../shared_folder/geo_analyser_tasks'
     topic_tasks: '../shared_folder/topic_analyser_tasks'
     user_tweets_tasks: '../shared_folder/user_tweets_tasks'
+    sa2_australia: '../shared_folder/SA2_2016_AUST.csv'
+    sa4_data_for_geo: '../shared_folder/SA4_data_for_geotagging.json' 
     
 
 COUCHDB:
-    host: 'http://115.146.95.29:5984'
+    host: 'https://couch1.cloudprojectnectar.co'
     user: 'admin'
     password: 'group27'
     tweets_db: 'tweets'

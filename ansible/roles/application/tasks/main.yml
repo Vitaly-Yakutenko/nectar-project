@@ -34,8 +34,11 @@
       mode: 0775
 
 -  name: "Run Stream Gatherer"
-   shell: "nohup python stream_gatherer.py > ~/production/logs/stream_gatherer.log &"
+   shell: "nohup python stream_gatherer.py >> ~/production/logs/stream_gatherer.log &"
+   args:
+      chdir: "~/production/app/"
 
 -  name: "Run Sentiment Analyser"
-   shell: "nohup python sentiment_analyser.py > ~/production/logs/sentiment_analyser.log &"
-
+   shell: "nohup python sentiment_analyser.py >> ~/production/logs/sentiment_analyser.log &"
+   args:
+      chdir: "~/production/app/"

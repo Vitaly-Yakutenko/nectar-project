@@ -99,7 +99,7 @@ couch_db_conf = cfg['COUCHDB']
 couch_db = TweetsDB(couch_db_conf)
 
 
-sa2_australia = cfg['QUEUES']['sa2_australia']
+sa2_australia = cfg['AURIN_DATA']['sa2_australia']
 df = pd.read_csv(sa2_australia)
 
 columns = ['SA4_CODE_2016', 'SA4_NAME_2016', 'GCCSA_NAME_2016', 'STATE_NAME_2016','GCCSA_CODE_2016']
@@ -107,8 +107,8 @@ columns = ['SA4_CODE_2016', 'SA4_NAME_2016', 'GCCSA_NAME_2016', 'STATE_NAME_2016
 mappings_df = df[columns].drop_duplicates().set_index('SA4_CODE_2016')
 mappings_df.head()
 
-sa2_australia = cfg['QUEUES']['sa4_data_for_geo']
-with open(sa2_australia, 'r') as fp:
+sa4_geo_tag = cfg['AURIN_DATA']['sa4_data_for_geo']
+with open(sa4_geo_tag, 'r') as fp:
     data = json.load(fp)
 
 features = data['features']

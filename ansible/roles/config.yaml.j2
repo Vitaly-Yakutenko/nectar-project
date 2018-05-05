@@ -25,6 +25,9 @@ QUEUES:
     topic_tasks: '{{ rank.shared_folder }}/topic_analyser_tasks'
     user_tweets_tasks: '{{ rank.shared_folder }}/user_tweets_tasks'
     
+AURIN_DATA:
+    sa2_australia: '{{ rank.shared_folder }}/SA2_2016_AUST.csv'
+    sa4_data_for_geo: '{{ rank.shared_folder }}/SA4_data_for_geotagging.json'
 
 COUCHDB:
     host: 'http://{{ rank.couch_host }}:{{ rank.couch_port | default('5984') }}'

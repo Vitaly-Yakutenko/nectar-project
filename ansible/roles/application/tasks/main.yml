@@ -33,6 +33,20 @@
       state: directory
       mode: 0775
 
+-  name: "Copying Aurin data (1/2)"
+   copy:
+      src: '~/nectar-project/notebooks/SA2_2016_AUST.csv'
+      dest: '/data/SA2_2016_AUST.csv'
+      mode: 0664
+      remote_src: yes
+
+-  name: "Copying Aurin data (2/2)"
+   copy:
+      src: '~/nectar-project/notebooks/SA4_data_for_geotagging.json'
+      dest: '/data/SA4_data_for_geotagging.json'
+      mode: 0664
+      remote_src: yes
+
 - block:
   -  name: "Stop Stream Gatherer"
      shell: "kill -9 $(ps -ef | grep '[p]ython stream_gatherer.py' | awk '{print $2}')"

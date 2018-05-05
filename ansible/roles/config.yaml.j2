@@ -1,0 +1,38 @@
+{% for rank in ranks %}
+{% if rank.id == v_rank %}
+TWEETER:
+    access_token: {{ rank.twitter.access_token }}
+    access_token_secret: {{ rank.twitter.access_token_secret }}
+    consumer_key: {{ rank.twitter.consumer_key }}
+    consumer_secret: {{ rank.twitter.consumer_secret }}
+    
+    #Rough bounding boxes for Victoria+Tasmania, NSW, Queensland, SA+NT, WA
+    bounding_boxes: [
+                        [141,-44,155,-34],
+                        [141,-34,155,-28],
+                        [141,-28,155,-10],
+                        [128,-38,141,-10],
+                        [110,-38,128,-10]
+                    ]                   
+    number_of_instances: {{ v_instances }}
+    rank: {{ rank.id }}
+
+QUEUES:
+    new_tweets: '{{ rank.shared_folder }}/tweets'
+    processed_tweets: '{{ rank.shared_folder }}/processed_tweets'
+    sentiment_tasks: '{{ rank.shared_folder }}/sentiment_tasks'
+    geo_tasks: '{{ rank.shared_folder }}/geo_analyser_tasks'
+    topic_tasks: '{{ rank.shared_folder }}/topic_analyser_tasks'
+    user_tweets_tasks: '{{ rank.shared_folder }}/user_tweets_tasks'
+    
+AURIN_DATA:
+    sa2_australia: '{{ rank.shared_folder }}/SA2_2016_AUST.csv'
+    sa4_data_for_geo: '{{ rank.shared_folder }}/SA4_data_for_geotagging.json'
+
+COUCHDB:
+    host: 'http://{{ rank.couch_host }}:{{ rank.couch_port | default('5984') }}'
+    user: '{{ rank.couch_user | default('admin') }}'
+    password: '{{ rank.couch_password | default('group27') }}'
+    tweets_db: '{{ rank.couch_db | default('tweets') }}'
+{% endif %}
+{% endfor %}

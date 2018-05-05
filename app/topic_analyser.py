@@ -53,6 +53,7 @@ while True:
                 os.remove(path)
                 print("file:{} is about crypto, and is updated",format(path))
             else:
+                os.remove(path)
                 continue
             
         except Exception as e:

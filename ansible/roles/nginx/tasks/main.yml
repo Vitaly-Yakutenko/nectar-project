@@ -3,18 +3,6 @@
     pkg: nginx
     state: present
 
-- name: "Installing jinja (1/2)"
-  become: yes
-  become_flags: '-H'
-  pip:
-    name: jinja2
-
-- name: "Installing jinja (2/2)"
-  become: yes
-  become_flags: '-H'
-  pip:
-    name: jinja2-cli
-
 - name: "Cloning letsencrypt repository"
   git:
     repo: https://github.com/letsencrypt/letsencrypt

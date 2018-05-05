@@ -1,23 +1,36 @@
-- name: "Installing Text Editors"
-  apt: pkg={{ item }} state=present
-  with_items:
-   - vim
-   - nano
+- block:
+  - name: "Installing Text Editors"
+    apt: pkg={{ item }} state=present
+    with_items:
+     - vim
+     - nano
 
-- name: "Installing Node"
-  apt: pkg={{ item }} state=present
-  with_items:
-   - npm
-   - nodejs-legacy
+  - name: "Installing Node"
+    apt: pkg={{ item }} state=present
+    with_items:
+     - npm
+     - nodejs-legacy
 
-- name: "Installing Docker Dependencies"
-  apt: pkg={{ item }} state=present
-  with_items:
-   - apt-transport-https
-   - ca-certificates
-   - curl
-   - software-properties-common
-   - python-pip
+  - name: "Installing Docker Dependencies"
+    apt: pkg={{ item }} state=present
+    with_items:
+     - apt-transport-https
+     - ca-certificates
+     - curl
+     - software-properties-common
+     - python-pip
+
+  - name: "Installing jinja (1/2)"
+    become_flags: '-H'
+    pip:
+      name: jinja2
+
+  - name: "Installing jinja (2/2)"
+    become_flags: '-H'
+    pip:
+      name: jinja2-cli
+
+  become: yes
 
 - name: "Adding Docker apt-key"
   apt_key:

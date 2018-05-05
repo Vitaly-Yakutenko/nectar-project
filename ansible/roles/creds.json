@@ -1,0 +1,34 @@
+{
+  "ranks": [
+    {
+      "id": "0",
+      "shared_folder": "../shared_folder",
+      "couch_host": "couch1.cloudprojectnectar.co",
+      "couch_port": "5984",
+      "couch_db":"tweets",
+      "couch_user":"admin",
+      "couch_password":"group27",
+      "twitter": {
+        "access_token": "1397965644-WVAG6QSXEBCdHtyAeEgBsKYXEKlkoBBtb58oOAN",
+        "access_token_secret": "V6V2aUVFmUwkUcHhFzOn4XnwdkbCJPLOL65ZSEnRe9d7O",
+        "consumer_key": "sZMPWW0zCEVsHnDyO950hWEWN",
+        "consumer_secret": "KfS6UNO3cTCC6j5xHfjQGaNzBFofDRN98pm5aguCvduIr0UQpg"
+      }
+    },
+    {
+      "id": "1",
+      "shared_folder": "../shared_folder",
+      "couch_host": "couch1.cloudprojectnectar.co",
+      "couch_port": "5984",
+      "couch_db":"tweets",
+      "couch_user":"admin",
+      "couch_password":"group27",
+      "twitter": {
+        "access_token": "1397965644-WVAG6QSXEBCdHtyAeEgBsKYXEKlkoBBtb58oOAN",
+        "access_token_secret": "V6V2aUVFmUwkUcHhFzOn4XnwdkbCJPLOL65ZSEnRe9d7O",
+        "consumer_key": "sZMPWW0zCEVsHnDyO950hWEWN",
+        "consumer_secret": "KfS6UNO3cTCC6j5xHfjQGaNzBFofDRN98pm5aguCvduIr0UQpg"
+      }
+    }
+  ]
+}

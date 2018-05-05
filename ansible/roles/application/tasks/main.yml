@@ -1,0 +1,41 @@
+-  name: "Git Clone"
+   git:
+      repo: https://dawerrafi:844715c917aedaae7149743212c0dcdea093b756@github.com/Vitaly-Yakutenko/nectar-project.git
+      dest: "~/nectar-project"
+      version: "{{ v_branch | default('master') }}"
+      force: yes
+
+-  name: "Running requirements.txt"
+   pip:
+      requirements: "~/nectar-project/requirements.txt"
+
+-  name: "Creating folder for Analysis"
+   file:
+      path: "~/production"
+      state: directory
+      mode: 0775
+
+-  name: "Installing Application"
+   shell: "cp -R ~/nectar-project/app ~/production/"
+
+-  name: "Copying config.yaml.j2 to server"
+   copy:
+      src: "../../config.yaml.j2"
+      dest: "~/production/"
+      mode: 0664
+
+-  name: "Generating config"
+   shell: "jinja2 ~/production/config.yaml.j2 -D v_rank={{ v_rank }} -D v_instances={{ v_instances }} ~/nectar-project/ansible/roles/creds.json --format=json > ~/production/config.yaml"
+
+-  name: "Make logs folder"
+   file:
+      path: "~/production/logs"
+      state: directory
+      mode: 0775
+
+-  name: "Run Stream Gatherer"
+   shell: "nohup python stream_gatherer.py > ~/production/logs/stream_gatherer.log &"
+
+-  name: "Run Sentiment Analyser"
+   shell: "nohup python sentiment_analyser.py > ~/production/logs/sentiment_analyser.log &"
+

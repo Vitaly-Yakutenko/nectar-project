@@ -34,5 +34,7 @@ COUCHDB:
     user: '{{ rank.couch_user | default('admin') }}'
     password: '{{ rank.couch_password | default('group27') }}'
     tweets_db: '{{ rank.couch_db | default('tweets') }}'
+    twitter_users_db: '{{ rank.couch_userdb }}'
+    aurin_db: '{{ rank.couch_aurindb }}'
 {% endif %}
 {% endfor %}

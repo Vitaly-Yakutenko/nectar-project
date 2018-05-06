@@ -66,6 +66,10 @@
 
   -  name: "Stop Geo Analyser"
      shell: "kill -9 $(ps -ef | grep '[p]ython geo_analyser.py' | awk '{print $2}')"
+
+  -  name: "Stop API Gatherer"
+     shell: "kill -9 $(ps -ef | grep '[p]ython api_gatherer.py' | awk '{print $2}')"
+
      ignore_errors: yes
   become: yes
 
@@ -91,5 +95,10 @@
 
 -  name: "Run Geo Analyser"
    shell: "nohup python geo_analyser.py > ~/geo_analyser.log &"
+   args:
+      chdir: "~/production/app/"
+
+-  name: "Run API Gatherer"
+   shell: "nohup python api_gatherer.py > ~/api_gatherer.log &"
    args:
       chdir: "~/production/app/"

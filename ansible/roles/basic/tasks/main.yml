@@ -19,6 +19,7 @@
      - curl
      - software-properties-common
      - python-pip
+     - python3-pip
 
   - name: "Installing jinja (1/2)"
     become_flags: '-H'

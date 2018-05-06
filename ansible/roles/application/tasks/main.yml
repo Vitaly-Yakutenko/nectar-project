@@ -66,11 +66,12 @@
 
   -  name: "Stop Geo Analyser"
      shell: "kill -9 $(ps -ef | grep '[p]ython geo_analyser.py' | awk '{print $2}')"
+     ignore_errors: yes
 
   -  name: "Stop API Gatherer"
      shell: "kill -9 $(ps -ef | grep '[p]ython api_gatherer.py' | awk '{print $2}')"
-
      ignore_errors: yes
+     
   become: yes
 
 -  name: "Run Stream Gatherer"

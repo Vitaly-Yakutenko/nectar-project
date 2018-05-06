@@ -49,27 +49,27 @@
 
 - block:
   -  name: "Stop Stream Gatherer"
-     shell: "kill -9 $(ps -ef | grep '[p]ython stream_gatherer.py' | awk '{print $2}')"
+     shell: "kill -9 $(ps -ef | grep '[p]ython3 stream_gatherer.py' | awk '{print $2}')"
      ignore_errors: yes
 
   -  name: "Stop Sentiment Analyser"
-     shell: "kill -9 $(ps -ef | grep '[p]ython sentiment_analyser.py' | awk '{print $2}')"
+     shell: "kill -9 $(ps -ef | grep '[p]ython3 sentiment_analyser.py' | awk '{print $2}')"
      ignore_errors: yes
 
   -  name: "Stop Twitter Manager"
-     shell: "kill -9 $(ps -ef | grep '[p]ython tweets_manager.py' | awk '{print $2}')"
+     shell: "kill -9 $(ps -ef | grep '[p]ython3 tweets_manager.py' | awk '{print $2}')"
      ignore_errors: yes
 
   -  name: "Stop Topic Analyser"
-     shell: "kill -9 $(ps -ef | grep '[p]ython topic_analyser.py' | awk '{print $2}')"
+     shell: "kill -9 $(ps -ef | grep '[p]ython3 topic_analyser.py' | awk '{print $2}')"
      ignore_errors: yes
 
   -  name: "Stop Geo Analyser"
-     shell: "kill -9 $(ps -ef | grep '[p]ython geo_analyser.py' | awk '{print $2}')"
+     shell: "kill -9 $(ps -ef | grep '[p]ython3 geo_analyser.py' | awk '{print $2}')"
      ignore_errors: yes
 
   -  name: "Stop API Gatherer"
-     shell: "kill -9 $(ps -ef | grep '[p]ython api_gatherer.py' | awk '{print $2}')"
+     shell: "kill -9 $(ps -ef | grep '[p]ython3 api_gatherer.py' | awk '{print $2}')"
      ignore_errors: yes
 
   become: yes

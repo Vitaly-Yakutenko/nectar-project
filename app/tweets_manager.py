@@ -73,7 +73,7 @@ def main():
 
         print('Iteration: {}\tFiles processed: {}'.format(i, len(unprocessed_tweets)))
         i+=1
-        time.sleep(5)
+        time.sleep(1)
 
 if __name__ == "__main__":
     main()

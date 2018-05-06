@@ -162,7 +162,7 @@ while True:
          
     print('Iteration: {}\tFiles processed: {}'.format(i, len(geo_tweets)))
     i+=1
-    time.sleep(15)
+    time.sleep(1)
 
 
 

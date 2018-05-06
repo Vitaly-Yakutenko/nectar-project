@@ -74,7 +74,7 @@ while True:
          
     print('Iteration: {}\tFiles processed: {}'.format(i, len(senti_tweets)))
     i+=1
-    time.sleep(9)
+    time.sleep(1)
 
 
 

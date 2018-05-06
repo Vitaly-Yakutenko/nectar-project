@@ -1,5 +1,7 @@
 import json
 import os
+from shapely.geometry import Point, Polygon
+from .couch_db import TwitterUsersDB
 
 
 class TaskHelper():
@@ -21,6 +23,23 @@ class TaskHelper():
     
 
 class GeoAnalyser(TaskHelper):
+    def australia_check(self, coordinates):
+        australia = [[109.94541423022338,-9.67869330662115],[155.03330484714022,-9.67869330662115],
+                     [155.03330484714022,-39.93552098705151],[109.94541423022338,-39.93552098705151]]
+        australia_box = Polygon(australia)
+        if isinstance(coordinates[0], list):              #check if polygon
+            coordinate_polygon = Polygon(coordinates[0])
+            pnt = Point(coordinate_polygon.centroid)
+
+        else:
+            pnt = Point(coordinates)
+
+        if australia_box.contains(pnt):
+            return True
+        else:
+            return False
+    
+    
     def append_task(self, tweet_id, tweet_data):
         try:
             if tweet_data['coordinates'] is not None:
@@ -51,11 +70,23 @@ class SentimentAnalyser(TaskHelper):
             
             
 class UsersAnalyser(TaskHelper):
+    def __init__(self, queue_path, cfg):
+        self._db = TwitterUsersDB(cfg['COUCHDB'])
+        super().__init__(queue_path)
+    
     def append_task(self, tweet_id, tweet_data):
-        try:
-            task_id = tweet_data['user']['id_str']
-            return self._append_task(task_id=task_id, content=task_id)
+        try:   
+            user_id = tweet_data['user']['id_str']
+            try:
+                user = self._db.get_user(user_id)
+                print('{} is known user. Skipping them.'.format(user_id))
+            except KeyError:
+                self._db.save_user(tweet_data['user'])
+                task_id = user_id
+                print('Sending user {} for processing'.format(user_id))
+                return self._append_task(task_id=task_id, content=task_id)
         except Exception as e:
+            print(type(e))
             print('Cannot process tweet_id and extract user_id due to an error . {}'.format(tweet_id, e))
             
 

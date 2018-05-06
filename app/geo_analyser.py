@@ -123,6 +123,7 @@ while True:
  
     for path in geo_tweets:
         try:
+            couch_db = TweetsDB(couch_db_conf)
             tweet_id = path.split('/')[-1].split('.')[0]
             with open(path, 'r') as fp:
                 geo = json.load(fp)

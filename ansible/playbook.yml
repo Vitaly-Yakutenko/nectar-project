@@ -3,7 +3,7 @@
   become: true
   roles:
   - basic
-  - mount
+  #- mount
 
 - hosts: jupyter
   become: yes
@@ -19,10 +19,18 @@
 - hosts: couchdb
   become: yes
   vars:
-   v_hostname: "{{ inventory_hostname }}"
-   v_email: sdawer@student.unimelb.edu.au
-   v_nginx:
-     proxy: '5984'
+    v_hostname: "{{ inventory_hostname }}"
+    v_email: sdawer@student.unimelb.edu.au
+    v_nginx:
+      proxy: '5984'
   roles:
   - ssl
   - nginx
+
+- hosts: production
+  vars:
+    v_instances: "{{ groups['production'] | length }}"
+    v_rank: "{{ groups.production.index(inventory_hostname) }}"
+    ansible_python_interpreter: "/usr/bin/python3"
+  roles:
+  - application

@@ -31,15 +31,18 @@ while True:
                     try:
                         tweet_id = item._json['id_str']
                         data = str(item._json)
-                        filename = '{}/{}.json'.format(new_tweets_queue, tweet_id)
-                        with open(filename, 'w') as tweet_fp:
+                        temp_file = '{}/{}.json.tmp'.format(new_tweets_queue, tweet_id)
+                        with open(temp_file, 'w') as tweet_fp:
                             json.dump(item._json, tweet_fp)
-                        print('Tweet {} was successfully queued to {}'.format(tweet_id, filename))
+                        task_file = temp_file[:-4]
+                        os.rename(temp_file, task_file)
+                        print('Tweet {} was successfully queued to {}'.format(tweet_id, task_file))
                     except Exception as e:
                         print('Tweet from user {} wasn\'t processed due to an error: {}'.format(user_id, e))
                 time.sleep(1)
                 fp.close()
             os.remove(path)
+            print('Task {} was processed successfully.'.format(path))
         except Exception as e:
             print('Enexpected Error: {}'.format(e))
             

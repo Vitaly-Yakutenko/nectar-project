@@ -90,7 +90,7 @@
       chdir: "~/production/app/"
 
 -  name: "Run Topic Analyser"
-   shell: "nohup python3 topic_analyser > ~/topic_analyser.log &"
+   shell: "nohup python3 topic_analyser.py > ~/topic_analyser.log &"
    args:
       chdir: "~/production/app/"
 

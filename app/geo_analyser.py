@@ -91,6 +91,7 @@ os.chdir('../')
 
 with open("config.yaml", 'r') as ymlfile:
     cfg = yaml.load(ymlfile)
+    ymlfile.close()
 
 
 #db connections
@@ -110,6 +111,7 @@ mappings_df.head()
 sa4_geo_tag = cfg['AURIN_DATA']['sa4_data_for_geo']
 with open(sa4_geo_tag, 'r') as fp:
     data = json.load(fp)
+    fp.close()
 
 features = data['features']
 
@@ -127,6 +129,7 @@ while True:
             tweet_id = path.split('/')[-1].split('.')[0]
             with open(path, 'r') as fp:
                 geo = json.load(fp)
+                fp.close()
             geo_doc =geo_check(geo['coordinates'])
             if australia_check(geo['coordinates']):         #geotag only if in Australia               
                 if geo_doc== None:

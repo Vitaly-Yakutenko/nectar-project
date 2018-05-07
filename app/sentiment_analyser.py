@@ -61,6 +61,7 @@ while True:
             tweet_id = path.split('/')[-1].split('.')[0]
             with open(path, 'r') as fp:
                 senti = fp.read()
+                fp.close()
             senti_doc = senti_analyse(senti)
             couch_db.update_document(tweet_id,senti_doc)
             try:

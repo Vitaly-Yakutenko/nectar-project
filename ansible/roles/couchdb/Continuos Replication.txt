@@ -1,0 +1,10 @@
+curl -X POST https://couch1.cloudprojectnectar.co/_replicate -d '{"source":"https://couch1.cloudprojectnectar.co/tweets_prod", "target":"https://couch2.cloudprojectnectar.co/tweets_prod", "continuous":true}' -H "Content-Type: application/json"
+
+
+curl -X POST https://couch1.cloudprojectnectar.co/_replicate -d '{"source":"https://couch1.cloudprojectnectar.co/aurin_datasets", "target":"https://couch2.cloudprojectnectar.co/aurin_datasets", "continuous":true}' -H "Content-Type: application/json"
+
+
+curl -X POST https://couch1.cloudprojectnectar.co/_replicate -d '{"source":"https://couch1.cloudprojectnectar.co/tweets", "target":"https://couch2.cloudprojectnectar.co/tweets", "continuous":true}' -H "Content-Type: application/json"
+
+
+curl -X POST https://couch1.cloudprojectnectar.co/_replicate -d '{"source":"https://couch1.cloudprojectnectar.co/twitter_users", "target":"https://couch2.cloudprojectnectar.co/twitter_users", "continuous":true}' -H "Content-Type: application/json"

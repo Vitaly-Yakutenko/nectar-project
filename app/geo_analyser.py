@@ -161,10 +161,11 @@ while True:
                         os.remove(path)
                     except OSError as e:
                             ## if failed, report it back to the user ##
-                        print ("Error: {} - {},".format(e.filename,e.strerror))         
+                        print ("Error: {} - {},".format(e.filename,e.strerror))
 
             except Exception as e:
                 print('Tweet {} wasn\'t geotagged and updated on DB due to error. {}'.format(tweet_id, e))
+                couch_db.reconnect()
 
         print('Iteration: {}\tFiles processed: {}'.format(i, len(geo_tweets)))
         

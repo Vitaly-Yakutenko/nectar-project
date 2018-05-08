@@ -57,9 +57,11 @@ while True:
  
     for path in senti_tweets:
         try:
+            couch_db = TweetsDB(couch_db_conf)
             tweet_id = path.split('/')[-1].split('.')[0]
             with open(path, 'r') as fp:
                 senti = fp.read()
+                fp.close()
             senti_doc = senti_analyse(senti)
             couch_db.update_document(tweet_id,senti_doc)
             try:
@@ -73,7 +75,7 @@ while True:
          
     print('Iteration: {}\tFiles processed: {}'.format(i, len(senti_tweets)))
     i+=1
-    time.sleep(9)
+    time.sleep(1)
 
 
 

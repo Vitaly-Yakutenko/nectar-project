@@ -91,6 +91,7 @@ os.chdir('../')
 
 with open("config.yaml", 'r') as ymlfile:
     cfg = yaml.load(ymlfile)
+    ymlfile.close()
 
 
 #db connections
@@ -110,6 +111,7 @@ mappings_df.head()
 sa4_geo_tag = cfg['AURIN_DATA']['sa4_data_for_geo']
 with open(sa4_geo_tag, 'r') as fp:
     data = json.load(fp)
+    fp.close()
 
 features = data['features']
 
@@ -118,50 +120,59 @@ geo_tasks_path= cfg['QUEUES']['geo_tasks']
 print('Initialisation finished.')
 print('Starting processing queue ...')
 i = 1
+
+couch_db = TweetsDB(couch_db_conf)
+
 while True:
-    geo_tweets = glob('{}/*.txt'.format(geo_tasks_path))[:1000]
- 
-    for path in geo_tweets:
-        try:
-            tweet_id = path.split('/')[-1].split('.')[0]
-            with open(path, 'r') as fp:
-                geo = json.load(fp)
-            geo_doc =geo_check(geo['coordinates'])
-            if australia_check(geo['coordinates']):         #geotag only if in Australia               
-                if geo_doc== None:
-                    none_geo = none_geo_check(geo['coordinates'])
-                    couch_db.update_document(tweet_id,none_geo)
+    try:
+        geo_tweets = glob('{}/*.txt'.format(geo_tasks_path))[:1000]
+
+        for path in geo_tweets:
+            try:
+                tweet_id = path.split('/')[-1].split('.')[0]
+                with open(path, 'r') as fp:
+                    geo = json.load(fp)
+                    fp.close()
+                geo_doc =geo_check(geo['coordinates'])
+                if australia_check(geo['coordinates']):         #geotag only if in Australia               
+                    if geo_doc== None:
+                        none_geo = none_geo_check(geo['coordinates'])
+                        couch_db.update_document(tweet_id,none_geo)
+                        print('Task {} was processed.'.format(path))
+                        try:
+                            os.remove(path)
+                        except OSError as e:
+                            ## if failed, report it back to the user ##
+                            print ("Error: {} - {},".format(e.filename,e.strerror))            
+                    else:
+                        couch_db.update_document(tweet_id,geo_doc)
+                        print('Task {} was processed.'.format(path))
+                        try:
+                            os.remove(path)
+                        except OSError as e:
+                            ## if failed, report it back to the user ##
+                            print ("Error: {} - {},".format(e.filename,e.strerror))         
+                else: 
+                                                 #if point not in Australia just add an attibute not in aus to the document
+                    none_aus = {'geo_analyser_tag':'tweet not in Australia'}
+                    couch_db.update_document(tweet_id,none_aus)
                     print('Task {} was processed.'.format(path))
                     try:
                         os.remove(path)
                     except OSError as e:
-                        ## if failed, report it back to the user ##
-                        print ("Error: {} - {},".format(e.filename,e.strerror))            
-                else:
-                    couch_db.update_document(tweet_id,geo_doc)
-                    print('Task {} was processed.'.format(path))
-                    try:
-                        os.remove(path)
-                    except OSError as e:
-                        ## if failed, report it back to the user ##
+                            ## if failed, report it back to the user ##
                         print ("Error: {} - {},".format(e.filename,e.strerror))         
-            else: 
-                                             #if point not in Australia just add an attibute not in aus to the document
-                none_aus = {'geo_analyser_tag':'tweet not in Australia'}
-                couch_db.update_document(tweet_id,none_aus)
-                print('Task {} was processed.'.format(path))
-                try:
-                    os.remove(path)
-                except OSError as e:
-                        ## if failed, report it back to the user ##
-                    print ("Error: {} - {},".format(e.filename,e.strerror))         
-    
-        except Exception as e:
-            print('Tweet {} wasn\'t geotagged and updated on DB due to error. {}'.format(tweet_id, e))
-         
-    print('Iteration: {}\tFiles processed: {}'.format(i, len(geo_tweets)))
+
+            except Exception as e:
+                print('Tweet {} wasn\'t geotagged and updated on DB due to error. {}'.format(tweet_id, e))
+
+        print('Iteration: {}\tFiles processed: {}'.format(i, len(geo_tweets)))
+        
+    except Exception as e:
+        couch_db.reconnect()
+        
     i+=1
-    time.sleep(15)
+    time.sleep(1)
 
 
 

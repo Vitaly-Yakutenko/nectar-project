@@ -2,11 +2,13 @@
   "ranks": [
     {
       "id": "0",
-      "shared_folder": "/data/",
+      "shared_folder": "/data",
       "couch_host": "couch1.cloudprojectnectar.co",
       "couch_port": "5984",
       "couch_db":"tweets_prod",
       "couch_user":"admin",
+      "couch_userdb": "twitter_users",
+      "couch_aurindb":"aurin_datasets",
       "couch_password":"group27",
       "twitter": {
         "access_token": "1397965644-WVAG6QSXEBCdHtyAeEgBsKYXEKlkoBBtb58oOAN",
@@ -22,6 +24,8 @@
       "couch_port": "5984",
       "couch_db":"tweets_prod",
       "couch_user":"admin",
+      "couch_userdb": "twitter_users",
+      "couch_aurindb":"aurin_datasets",
       "couch_password":"group27",
       "twitter": {
         "access_token": "593737260-H2RvZvkrXcS7dlCMUV86I1ZRqBOKxdirEE5nbYiF",

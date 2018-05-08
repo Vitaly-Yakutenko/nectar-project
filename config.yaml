@@ -33,4 +33,5 @@ COUCHDB:
     user: 'admin'
     password: 'group27'
     tweets_db: 'tweets_prod'
+    twitter_users_db: 'twitter_users'
     aurin_db: 'aurin_datasets'

@@ -25,7 +25,7 @@
       mode: 0664
 
 -  name: "Generating config"
-   shell: "jinja2 ~/production/config.yaml.j2 -D v_rank={{ v_rank }} -D v_instances={{ v_instances }} ~/nectar-project/ansible/roles/creds.json --format=json > ~/production/config.yaml"
+   shell: "jinja2 ~/production/config.yaml.j2 -D v_rank={{ v_rank }} -D v_instances={{ v_instances }} ~/nectar-project/ansible/roles/creds.json --format=yaml > ~/production/config.yaml"
 
 -  name: "Make logs folder"
    file:
@@ -49,47 +49,57 @@
 
 - block:
   -  name: "Stop Stream Gatherer"
-     shell: "kill -9 $(ps -ef | grep '[p]ython stream_gatherer.py' | awk '{print $2}')"
+     shell: "kill -9 $(ps -ef | grep '[p]ython3 stream_gatherer.py' | awk '{print $2}')"
      ignore_errors: yes
 
   -  name: "Stop Sentiment Analyser"
-     shell: "kill -9 $(ps -ef | grep '[p]ython sentiment_analyser.py' | awk '{print $2}')"
+     shell: "kill -9 $(ps -ef | grep '[p]ython3 sentiment_analyser.py' | awk '{print $2}')"
      ignore_errors: yes
 
   -  name: "Stop Twitter Manager"
-     shell: "kill -9 $(ps -ef | grep '[p]ython tweets_manager.py' | awk '{print $2}')"
+     shell: "kill -9 $(ps -ef | grep '[p]ython3 tweets_manager.py' | awk '{print $2}')"
      ignore_errors: yes
 
   -  name: "Stop Topic Analyser"
-     shell: "kill -9 $(ps -ef | grep '[p]ython topic_analyser.py' | awk '{print $2}')"
+     shell: "kill -9 $(ps -ef | grep '[p]ython3 topic_analyser.py' | awk '{print $2}')"
      ignore_errors: yes
 
   -  name: "Stop Geo Analyser"
-     shell: "kill -9 $(ps -ef | grep '[p]ython geo_analyser.py' | awk '{print $2}')"
+     shell: "kill -9 $(ps -ef | grep '[p]ython3 geo_analyser.py' | awk '{print $2}')"
      ignore_errors: yes
+
+  -  name: "Stop API Gatherer"
+     shell: "kill -9 $(ps -ef | grep '[p]ython3 api_gatherer.py' | awk '{print $2}')"
+     ignore_errors: yes
+
   become: yes
 
 -  name: "Run Stream Gatherer"
-   shell: "nohup python stream_gatherer.py > ~/stream_gatherer.log &"
+   shell: "nohup python3 stream_gatherer.py > ~/stream_gatherer.log &"
    args:
       chdir: "~/production/app/"
 
 -  name: "Run Sentiment Analyser"
-   shell: "nohup python sentiment_analyser.py > ~/sentiment_analyser.log &"
+   shell: "nohup python3 sentiment_analyser.py > ~/sentiment_analyser.log &"
    args:
       chdir: "~/production/app/"
 
 -  name: "Run Twitter Manager"
-   shell: "nohup python tweets_manager.py > ~/tweets_manager.log &"
+   shell: "nohup python3 tweets_manager.py > ~/tweets_manager.log &"
    args:
       chdir: "~/production/app/"
 
 -  name: "Run Topic Analyser"
-   shell: "nohup python topic_analyser > ~/topic_analyser.log &"
+   shell: "nohup python3 topic_analyser.py > ~/topic_analyser.log &"
    args:
       chdir: "~/production/app/"
 
 -  name: "Run Geo Analyser"
-   shell: "nohup python geo_analyser.py > ~/geo_analyser.log &"
+   shell: "nohup python3 geo_analyser.py > ~/geo_analyser.log &"
+   args:
+      chdir: "~/production/app/"
+
+-  name: "Run API Gatherer"
+   shell: "nohup python3 api_gatherer.py > ~/api_gatherer.log &"
    args:
       chdir: "~/production/app/"

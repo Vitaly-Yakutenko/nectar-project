@@ -30,9 +30,11 @@ AURIN_DATA:
     sa4_data_for_geo: '{{ rank.shared_folder }}/SA4_data_for_geotagging.json'
 
 COUCHDB:
-    host: 'http://{{ rank.couch_host }}:{{ rank.couch_port | default('5984') }}'
+    host: 'https://{{ rank.couch_host }}'
     user: '{{ rank.couch_user | default('admin') }}'
     password: '{{ rank.couch_password | default('group27') }}'
     tweets_db: '{{ rank.couch_db | default('tweets') }}'
+    twitter_users_db: '{{ rank.couch_userdb }}'
+    aurin_db: '{{ rank.couch_aurindb }}'
 {% endif %}
 {% endfor %}

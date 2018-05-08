@@ -24,6 +24,13 @@ class CouchDB():
         document.save()
         return True
     
+    def reconnect(self):
+        try:
+            self._client.disconnect()
+            self._client.connect()
+        except Exceptions as e:
+            print('Eror: {}'.format(e))
+    
 
 class TweetsDB(CouchDB):
     def __init__(self, cfg):

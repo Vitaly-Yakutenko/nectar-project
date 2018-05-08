@@ -58,11 +58,10 @@ def main():
             try:
                 with open(path, 'r') as fp:
                     tweet_json = json.load(fp)
+                    tweet_id = tweet_json['id_str']
                     
                     if tweet_within_bounding_box(tweet_json):
                         couch_db.save_tweet(tweet_json)
-                        tweet_id = tweet_json['id_str']
-
                         for analyser in analysers:
                             analyser.append_task(tweet_id, tweet_json)
                     else:

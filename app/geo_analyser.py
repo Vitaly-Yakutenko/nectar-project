@@ -134,28 +134,18 @@ while True:
                     geo = json.load(fp)
                     fp.close()
                 geo_doc =geo_check(geo['coordinates'])
-                if australia_check(geo['coordinates']):         #geotag only if in Australia               
-                    if geo_doc== None:
-                        none_geo = none_geo_check(geo['coordinates'])
-                        couch_db.update_document(tweet_id,none_geo)
-                        print('Task {} was processed.'.format(path))
-                        try:
-                            os.remove(path)
-                        except OSError as e:
+                #if australia_check(geo['coordinates']):         #geotag only if in Australia               
+                if geo_doc== None:
+                    none_geo = none_geo_check(geo['coordinates'])
+                    couch_db.update_document(tweet_id,none_geo)
+                    print('Task {} was processed.'.format(path))
+                    try:
+                        os.remove(path)
+                    except OSError as e:
                             ## if failed, report it back to the user ##
-                            print ("Error: {} - {},".format(e.filename,e.strerror))            
-                    else:
-                        couch_db.update_document(tweet_id,geo_doc)
-                        print('Task {} was processed.'.format(path))
-                        try:
-                            os.remove(path)
-                        except OSError as e:
-                            ## if failed, report it back to the user ##
-                            print ("Error: {} - {},".format(e.filename,e.strerror))         
-                else: 
-                                                 #if point not in Australia just add an attibute not in aus to the document
-                    none_aus = {'geo_analyser_tag':'tweet not in Australia'}
-                    couch_db.update_document(tweet_id,none_aus)
+                        print ("Error: {} - {},".format(e.filename,e.strerror))            
+                else:
+                    couch_db.update_document(tweet_id,geo_doc)
                     print('Task {} was processed.'.format(path))
                     try:
                         os.remove(path)

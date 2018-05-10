@@ -8,23 +8,34 @@ http {
     }
 
     # HTTP server to redirect all 80 traffic to SSL/HTTPS
+    {% if v_http_redirect is defined %}
     server {
         listen 80;
-        server_name {{domain}};
+        server_name {{ v_hostname }};
 
         # Tell all requests to port 80 to be 302 redirected to HTTPS
         return 302 https://$host$request_uri;
     }
+    {% else %}
+    {% if v_root %}
+    server {
+        listen 80;
+        server_name {{ v_hostname }};
+        root {{ v_root }};
+    }
+    {% endif %}
+    {% endif %}
 
+    {% if v_https is defined %}
     # HTTPS server to handle requests
     server {
         listen 443;
         ssl on;
 
-        server_name {{domain}};
+        server_name {{ v_hostname }};
 
-        ssl_certificate /etc/letsencrypt/live/{{domain}}/fullchain.pem;
-        ssl_certificate_key /etc/letsencrypt/live/{{domain}}/privkey.pem;
+        ssl_certificate /etc/letsencrypt/live/{{ v_hostname }}/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/{{ v_hostname }}/privkey.pem;
 
         ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
         ssl_prefer_server_ciphers on;
@@ -36,15 +47,15 @@ http {
         add_header Strict-Transport-Security max-age=15768000;
 
         # if proxy port is defined, set that to default
-        {% if proxy_port and proxy_port != "undefined" %}
+        {% if v_nginx and v_nginx.proxy is defined %}
         location / {
-            proxy_pass {% if https %}https{% else %}http{% endif %}://127.0.0.1:{{proxy_port}};
+            proxy_pass {% if v_nginx.https is defined %}https{% else %}http{% endif %}://127.0.0.1:{{v_nginx.proxy}};
             proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header Host $host;
+            proxy_set_heaer Host $host;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         }
         {% else %}
-        root {{ root_directory | default("/var/www/html") }};
+        root {{ v_root | default("/var/www/html") }};
 
         # Add index.php to the list if you are using PHP
         index index.php index.html index.htm index.nginx-debian.html;
@@ -53,12 +64,6 @@ http {
                 # First attempt to serve request as file, then
                 # as directory, then fall back to displaying a 404.
                 try_files $uri $uri/ =404;
-	        # proxy_pass {% if https %} https {% else %} http {% endif %}://localhost:8080;
-        	# proxy_http_version 1.1;
-	        # proxy_set_header Upgrade $http_upgrade;
-        	# proxy_set_header Connection 'upgrade';
-	        # proxy_set_header Host $host;
-        	# proxy_cache_bypass $http_upgrade;
         }
         {% endif %}
 
@@ -67,4 +72,5 @@ http {
             allow all;
         }
     }
+    {% endif %}
 }

@@ -33,6 +33,23 @@
         "consumer_key": "BK79L57cJrbw00wd572sCRYNi",
         "consumer_secret": "xt3DVna1i32na3VxX5YXo6O4yY8rEp5p8ZOcfQj1IzDLX9xSLk"
       }
+    },
+    {
+      "id": "2",
+      "shared_folder": "/data",
+      "couch_host": "couch1.cloudprojectnectar.co",
+      "couch_port": "5984",
+      "couch_db":"tweets_prod",
+      "couch_user":"admin",
+      "couch_userdb": "twitter_users",
+      "couch_aurindb":"aurin_datasets",
+      "couch_password":"group27",
+      "twitter": {
+        "access_token": "3098375923-Jn0b0thmQlxYANmMnEAWUD02MmFMglZj3zZWwLe",
+        "access_token_secret": "2BC3yrlFpXi33YKrSb5Yf2bbITqHkL38kNRm3uD16MRyg",
+        "consumer_key": "IKguRx5c4ICxRhgABpfP80h4t",
+        "consumer_secret": "PA2dihSbFgH39VRAHL1g8wGREjTtoab6Ck6haPv9D4M6eS7cao"
+      }
     }
   ]
 }

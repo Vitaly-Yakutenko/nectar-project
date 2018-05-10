@@ -103,3 +103,17 @@
    shell: "nohup python3 api_gatherer.py > ~/api_gatherer.log &"
    args:
       chdir: "~/production/app/"
+
+# This was done for scaling our geo-analyser
+#-  name: "Copying crontab file for geo-analyser"
+#   copy:
+#      src: "../files/reload.sh"
+#      dest: "~/"
+#      mode: 0776
+#
+#-  name: "Creating crontab"
+#   cron:
+#      minute: "30"
+#      job: "~/reload.sh"
+#      state: present
+#      user: ubuntu

@@ -3,7 +3,7 @@
   become: true
   roles:
   - basic
-  #- mount
+  - mount
 
 - hosts: jupyter
   become: yes
@@ -12,8 +12,12 @@
     v_email: sdawer@student.unimelb.edu.au
     v_client_id: dc7ada54eecdbf6af6fd
     v_client_secret: abf2ce8f6276682401c0a7b1f05446430932909b
+    v_root: "/data/shared_folder/public"
+    v_nginx:
+
   roles:
   - ssl
+  - nginx
   - jupiterhub
 
 - hosts: couchdb
@@ -23,6 +27,8 @@
     v_email: sdawer@student.unimelb.edu.au
     v_nginx:
       proxy: '5984'
+    v_http_redirect: yes
+    v_https: yes
   roles:
   - ssl
   - nginx

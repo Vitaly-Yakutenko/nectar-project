@@ -4,12 +4,18 @@
     state=directory
   become: yes
 
+- name: "Checking if volume exists"
+  stat:
+    path: /dev/vdc
+  register: volume
+
 - name: "Creating file system"
   become: yes
   filesystem:
     fstype: ext4
     dev: /dev/vdc
     force: no
+  when: volume.stat.exists
 
 - name: "Creating group"
   group:
@@ -29,6 +35,7 @@
     src: /dev/vdc
     state: mounted
     fstype: ext4
+  when: volume.stat.exists
 
 
 - name: "Changing ownership to standard user"

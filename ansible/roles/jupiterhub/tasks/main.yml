@@ -18,6 +18,18 @@
   pip:
     name: jinja2-cli
 
+- name: "Creating notebooks directory in host machine"
+  file:
+    path: "/data/notebooks"
+    state: directory
+    mode: 0755
+
+- name: "Creating Shared Directory"
+  file:
+    path: "/data/shared_folder"
+    state: directory
+    mode: 0755
+
 - name: "Create a login user"
   user:
    name: admin 
@@ -63,12 +75,6 @@
     owner: root
     group: root
     mode: 0644
-
-- name: "Creating notebooks directory in host machine"
-  file:
-    path: "/data/notebooks"
-    state: directory
-    mode: 0755
 
 - name: "Creating Secrets Directory"
   file:

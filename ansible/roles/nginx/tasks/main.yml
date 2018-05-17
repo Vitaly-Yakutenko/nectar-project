@@ -18,18 +18,24 @@
   shell: "{{ ansible_user_dir }}/letsencrypt/letsencrypt-auto certonly --standalone -d {{ v_hostname }} -m {{ v_email }} -n --agree-tos"
   become: true
 
-- name: "Copying nginx.conf.j2"
-  become: true
-  copy:
-    src: ../files/nginx.conf.j2
-    dest: /etc/nginx/nginx.conf.j2
-    owner: ubuntu
-    group: ubuntu
-    mode: 0644
+#- name: "Copying nginx.conf.j2"
+#  become: true
+#  copy:
+#    src: ../files/nginx.conf.j2
+#    dest: /etc/nginx/nginx.conf.j2
+#    owner: ubuntu
+#    group: ubuntu
+#    mode: 0644
 
 - name: "Configuring Nginx"
   become: yes
-  shell: "jinja2 /etc/nginx/nginx.conf.j2 -D domain={{ v_hostname }} -D proxy_port={{ v_nginx.proxy if v_nginx else 'undefined' }} -D https={{  v_nginx.https if v_nginx.https is defined else False }} > /etc/nginx/nginx.conf"
+  template:
+    src: "../templates/nginx.conf.j2"
+    dest: "/etc/nginx/nginx.conf"
+    owner: root
+    group: root
+    mode: 0644
+#  shell: "jinja2 /etc/nginx/nginx.conf.j2 -D domain={{ v_hostname }} -D proxy_port={{ v_nginx.proxy if v_nginx else 'undefined' }} -D https={{  v_nginx.https if v_nginx is defined and v_nginx.https is defined else False }} -D root_directory={{ v_root if v_root is defined else False }}> /etc/nginx/nginx.conf"
 
 - name: "Restarting Nginx service"
   become: true

@@ -1,8 +1,10 @@
 [couchdb]
 couch1.cloudprojectnectar.co
+couch2.cloudprojectnectar.co
 
-[geo]
+[production]
+prod1.cloudprojectnectar.co
+prod2.cloudprojectnectar.co
 
-[sentiment]
-
-[harvester]
+[jupyter]
+jupyter2.cloudprojectnectar.co

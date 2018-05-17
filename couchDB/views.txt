@@ -1,0 +1,44 @@
+# this text file shows some sample map functions written in JAVA SCRIPT for replicating view we built on our couchDB
+## map function which emits the doc.sentiment, date etc if it belongs to Cryptocurrency.
+Example 1 : all-crypto-with-time
+function (doc)
+{
+  var st = doc.created_at ;
+  str = st.replace("+0000 ", "") + " UTC";
+  var d = new Date(str);
+  var str = d.toLocaleDateString();
+  var a = /crypto/i;
+  var b = /bitcoin/i;
+  var c = /\bcoin\b/i;
+  var d = /blockchain/i;
+  var e = /btc/i;
+  var f = /ethereum/i;
+  var g = /\bdoge\b/i;
+  var h = /litecoin/i;
+  var i = /\btron\b/i;
+  var j = /copay/i;
+  var k = /bitpay/i;
+  var l = /mycelium/i;
+  var m = /trezor/i;
+  var n = /\bico\b/i;
+  var o = /\bdarknet market\b/i;
+  var p = /central ledger/i;
+  var q = /altcoin/i;
+
+  var txt = doc.text;
+  var result = (a.test(txt))||(b.test(txt))||(c.test(txt))||(d.test(txt))||(e.test(txt))||(f.test(txt))||(g.test(txt))||(h.test(txt))||(i.test(txt))||(j.test(txt))||(k.test(txt))||(l.test(txt))||(m.test(txt))||(n.test(txt))||(o.test(txt))||(p.test(txt))||(q.test(txt)) ;
+  if (result)
+   {
+     emit([doc.SA4_name, doc.GCCSA_name, doc.State_name, doc.sentiment,str], 1);
+   }
+
+}
+## counts the total sentiment for each geo tag for each SA level
+Example 2 : geo_sentiment_counts
+function (doc) {
+  var st = doc.created_at ;
+  str = st.replace("+0000 ", "") + " UTC";
+  var d = new Date(str);
+  var dt = d.toLocaleDateString();
+  emit([doc.SA4_name, doc.GCCSA_name, doc.State_name, doc.sentiment, dt], 1);
+}

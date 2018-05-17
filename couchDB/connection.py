@@ -1,6 +1,6 @@
 from cloudant.client import CouchDB
 
-client = CouchDB("admin", "group27", url="http://couchdb.cloudprojectnectar.co:5984", connect=True)
+client = CouchDB("admin", "group27", url="https://couch1.cloudprojectnectar.co", connect=True)
 
 def get_database(db_name):
     # Context handles connect() and disconnect() for you.

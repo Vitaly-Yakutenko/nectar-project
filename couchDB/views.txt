@@ -1,3 +1,13 @@
+#######################################################################
+# GROUP 23
+# CITY: Melbourne
+# MEMBERS:
+#  - Vitaly Yakutenko - 976504
+#  - Shireen Hassan - 972461
+#  - Himagna Erla - 975172
+#  - Areeb Moin - 899193
+#  - Syed Muhammad Dawer - 923859
+#######################################################################
 # this text file shows some sample map functions written in JAVA SCRIPT for replicating view we built on our couchDB
 ## map function which emits the doc.sentiment, date etc if it belongs to Cryptocurrency.
 Example 1 : all-crypto-with-time

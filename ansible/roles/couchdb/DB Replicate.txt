@@ -1,3 +1,14 @@
+#######################################################################
+# GROUP 23
+# CITY: Melbourne
+# MEMBERS:
+#  - Vitaly Yakutenko - 976504
+#  - Shireen Hassan - 972461
+#  - Himagna Erla - 975172
+#  - Areeb Moin - 899193
+#  - Syed Muhammad Dawer - 923859
+#######################################################################
+
 curl -X POST 'http://couchdb.cloudprojectnectar.co:5984/_replicate' -H 'Content-type: application/json' -d '{"source": "http://couchdb.cloudprojectnectar.co:5984/tweets", "target": "https://couch1.cloudprojectnectar.co/tweets"}'
 
 #Alternate Method:

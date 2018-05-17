@@ -1,3 +1,13 @@
+#######################################################################
+# GROUP 23
+# CITY: Melbourne
+# MEMBERS:
+#  - Vitaly Yakutenko - 976504
+#  - Shireen Hassan - 972461
+#  - Himagna Erla - 975172
+#  - Areeb Moin - 899193
+#  - Syed Muhammad Dawer - 923859
+#######################################################################
 from cloudant.client import CouchDB
 
 client = CouchDB("admin", "group27", url="https://couch1.cloudprojectnectar.co", connect=True)

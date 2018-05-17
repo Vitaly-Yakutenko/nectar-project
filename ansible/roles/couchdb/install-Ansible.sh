@@ -1,3 +1,14 @@
+#######################################################################
+# GROUP 23
+# CITY: Melbourne
+# MEMBERS:
+#  - Vitaly Yakutenko - 976504
+#  - Shireen Hassan - 972461
+#  - Himagna Erla - 975172
+#  - Areeb Moin - 899193
+#  - Syed Muhammad Dawer - 923859
+#######################################################################
+
 #Download and install Miniconda:
 curl -OL https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
 bash Miniconda3-latest-Linux-x86_64.sh

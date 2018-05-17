@@ -1,3 +1,13 @@
+#######################################################################
+# GROUP 23
+# CITY: Melbourne
+# MEMBERS:
+#  - Vitaly Yakutenko - 976504
+#  - Shireen Hassan - 972461
+#  - Himagna Erla - 975172
+#  - Areeb Moin - 899193
+#  - Syed Muhammad Dawer - 923859
+#######################################################################
 """A library that provides a Python interface to the Twitter API"""
 from __future__ import division
 from __future__ import print_function
